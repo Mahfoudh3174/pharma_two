@@ -6,6 +6,7 @@ use App\Models\Pharmacy;
 use App\Models\Medication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class MedicationController extends Controller
 {
@@ -30,7 +31,14 @@ class MedicationController extends Controller
         }
     
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+             'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('medications')->where(function ($query) use ($user) {
+                    return $query->where('pharmacy_id', $user->pharmacy->id);
+                })
+            ],
             'generic_name' => 'nullable|string|max:255',
             'category' => 'required|string|max:255',
             'dosage_form' => 'required|string|max:255',
