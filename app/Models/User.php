@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'pharmacy_id',
         'password',
     ];
 
@@ -45,8 +46,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function commandes()
+
+    
+    public function pharmacy()
     {
-        return $this->hasMany(Commande::class);
+        return $this->belongsTo(Pharmacy::class);
     }
+
 }
