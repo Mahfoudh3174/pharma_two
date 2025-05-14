@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\PharmacyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MedicationController;
@@ -39,6 +40,10 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::resource('medications', MedicationController::class);
     });
+
+    Route::get("commandes/details/{commande}",[CommandeController::class, "details"])->name("commandes.details");
+    Route::get("commandes/validate/{commande}",[CommandeController::class, "validate"])->name("commandes.validate");
+    Route::post("commandes/reject",[CommandeController::class, "reject"])->name("commandes.reject");
 });
 
 

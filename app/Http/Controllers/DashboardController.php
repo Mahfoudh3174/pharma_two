@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commande;
 use App\Models\Medication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,8 @@ class DashboardController extends Controller
 
         // Get all medications for quick add modal
         $allMedications = Medication::orderBy('name')->get();
+
+        $commandes = Commande::simplePaginate(5);
     
         // Get medications if pharmacy exists with enhanced filtering
         $medications = $pharmacy 
@@ -58,6 +61,7 @@ class DashboardController extends Controller
             'pharmacy' => $pharmacy,
             'medications' => $medications,
             'allMedications' => $allMedications,
+            'commandes' => $commandes,
             'categories' => Medication::distinct()->pluck('category'),
             'sortDirection' => $request->direction === 'desc' ? 'desc' : 'asc',
             'currentSort' => $request->sort

@@ -54,7 +54,7 @@
                         </div>
                         <div class="bg-green-100 p-3 rounded-full">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                             </svg>
                         </div>
                     </div>
@@ -163,13 +163,13 @@
                 </form>
             </div>
 
-            <!-- Tableau des Médicaments -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <!-- Tableau des Médicaments -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-2">
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
+                    <table id="medicationsTable" class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable(0)">
                                     <div class="flex items-center">
                                         Nom
                                         <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -180,7 +180,7 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Catégorie
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable(2, true)">
                                     <div class="flex items-center">
                                         Stock
                                         <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -188,7 +188,7 @@
                                         </svg>
                                     </div>
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable(3, true)">
                                     <div class="flex items-center">
                                         Prix
                                         <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -314,6 +314,79 @@
                 </div>
                 @endif
             </div>
+
+            <!-- Section des Commandes -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-4">
+                <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                    <h2 class="text-lg font-semibold text-gray-900">Gestion des Commandes</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    N° Commande
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Client
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Date
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Montant
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Statut
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach ($commandes as $commande )
+                                
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{$commande->uuid}}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{$commande->user->name}}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{$commande->date}}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{$commande->amount}}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    {{$commande->status}}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <div class="flex justify-end space-x-2">
+                                        <a href="{{route("commandes.validate", $commande->id)}}" class="text-green-600 hover:text-green-900">
+                                            Valider
+                                        </a>
+                                        <button onclick="showRejectModal({{$commande->id}})" class="text-red-600 hover:text-red-900">
+                                            Rejeter
+                                        </button>
+                                        <a href="{{route('commandes.details', $commande->id)}}" class="text-blue-600 hover:text-blue-900">
+                                            Détails
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                
+                            @endforeach
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         @else
          <!-- No Pharmacy State - Professional Version -->
         <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 max-w-5xl mx-auto">
@@ -386,4 +459,78 @@
         @endisset
     </div>
 
-</x-layouts.app>
+    <!-- Reject Order Modal -->
+    <div id="rejectModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <form action="{{route("commandes.reject")}}" method="POST">
+                    @csrf
+                <input type="hidden" name="order_id" id="order_id" required>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Rejeter la Commande</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500 mb-4">Veuillez indiquer la raison du rejet :</p>
+                    <textarea id="rejectReason" required name="reject_reason" rows="3" class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none" placeholder="Raison du rejet..."></textarea>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <button type="submit" id="confirmReject" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        Confirmer
+                    </button>
+                    <button onclick="document.getElementById('rejectModal').classList.add('hidden')" class="ml-3 px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                        Annuler
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Table sorting function
+        function sortTable(columnIndex, isNumeric = false) {
+            const table = document.getElementById("medicationsTable");
+            const tbody = table.querySelector("tbody");
+            const rows = Array.from(tbody.querySelectorAll("tr"));
+            
+            // Determine sort direction
+            const header = table.querySelectorAll("th")[columnIndex];
+            const isAscending = !header.classList.contains("asc");
+            
+            // Clear other sort indicators
+            table.querySelectorAll("th").forEach(th => {
+                th.classList.remove("asc", "desc");
+            });
+            
+            // Set sort indicator on current column
+            header.classList.add(isAscending ? "asc" : "desc");
+            
+            // Sort rows
+            rows.sort((a, b) => {
+                const aCell = a.cells[columnIndex];
+                const bCell = b.cells[columnIndex];
+                
+                let aValue = aCell.textContent.trim();
+                let bValue = bCell.textContent.trim();
+                
+                if (isNumeric) {
+                    // Extract numbers from strings if needed
+                    aValue = parseFloat(aValue.replace(/[^\d.-]/g, '')) || 0;
+                    bValue = parseFloat(bValue.replace(/[^\d.-]/g, '')) || 0;
+                    return isAscending ? aValue - bValue : bValue - aValue;
+                } else {
+                    return isAscending 
+                        ? aValue.localeCompare(bValue)
+                        : bValue.localeCompare(aValue);
+                }
+            });
+            
+            // Reattach sorted rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
+    
+        function showRejectModal(orderId) {
+            document.getElementById("order_id").value= orderId;
+            document.getElementById('rejectModal').classList.remove('hidden');
+        }
+        
+    </script>
+</x-app-layout>
