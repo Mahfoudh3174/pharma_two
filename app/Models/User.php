@@ -53,9 +53,6 @@ class User extends Authenticatable
         return $this->belongsTo(Pharmacy::class);
     }
 
-    public function commandes()
-    {
-        return $this->hasMany(Commande::class);
-    }
+
 
 }

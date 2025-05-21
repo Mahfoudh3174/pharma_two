@@ -14,8 +14,20 @@ class Commande extends Model
         "reject_reason",
     ];
 
-    public function user()
+    public function client()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Client::class);
+    }
+    public function medications(){
+        return $this->hasMany(Medication::class,'commande_medications')
+        ->using(CommandeMedictation::class)
+        ->withPivot('quantity', 'total_price')
+        ->withTimestamps()
+ 
+        ;
+    }
+    public function pharmacy()
+    {
+        return $this->belongsTo(Pharmacy::class);
     }
 }

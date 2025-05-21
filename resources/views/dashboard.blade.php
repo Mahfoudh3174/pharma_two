@@ -3,11 +3,13 @@
         <!-- En-tête -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div>
+                
+                
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">
                     @isset($pharmacy)
                         <span class="text-green-600">{{ $pharmacy->name }}</span> - Gestion des Médicaments
                     @else
-                        <i class="fas fa-clinic-medical text-blue-500 mr-2"></i>Tableau de Bord
+                        <i class="fas fa-clinic-medical text-blue-500 mr-2"></i>Tableau de Bord 
                     @endisset
                 </h1>
                 <p class="text-gray-600 mt-2">
@@ -50,7 +52,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-500">Médicaments Totaux</p>
-                            <h3 class="text-2xl font-bold mt-1">{{ $medications->count() }}</h3>
+                            <h3 class="text-2xl font-bold mt-1">{{ $pharmacy->medications()->count() }}</h3>
                         </div>
                         <div class="bg-green-100 p-3 rounded-full">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -65,7 +67,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-500">Stock Faible (<10)</p>
-                            <h3 class="text-2xl font-bold mt-1 text-orange-600">{{ $pharmacy->medications()->where('medication_pharmacy.stock', '<', 10)->count() }}</h3>
+                            <h3 class="text-2xl font-bold mt-1 text-orange-600">{{ $pharmacy->low_stock_count }}</h3>
                         </div>
                         <div class="bg-orange-100 p-3 rounded-full">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -80,7 +82,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-500">En Rupture</p>
-                            <h3 class="text-2xl font-bold mt-1 text-red-600">{{ $pharmacy->medications()->where('medication_pharmacy.stock', 0)->count() }}</h3>
+                            <h3 class="text-2xl font-bold mt-1 text-red-600">{{ $pharmacy->out_of_stock_count }}</h3>
                         </div>
                         <div class="bg-red-100 p-3 rounded-full">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -96,7 +98,7 @@
                         <div>
                             <p class="text-sm font-medium text-gray-500">Valeur du Stock</p>
                             <h3 class="text-2xl font-bold mt-1 text-indigo-600">
-                                {{ number_format($pharmacy->medications->sum(function($med) { return $med->pivot->stock * $med->pivot->price; }), 2) }} UM
+                                {{ number_format($pharmacy->totalValue, 2, ',', ' ') }} UM
                             </h3>
                         </div>
                         <div class="bg-indigo-100 p-3 rounded-full">
@@ -130,20 +132,14 @@
                     <div class="sm:col-span-3">
                         <select name="category" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             <option value="">Toutes Catégories</option>
-                            <option value="Antibiotics" {{ request('category') == 'Antibiotics' ? 'selected' : '' }}>Antibiotiques</option>
-                            <option value="Analgesics" {{ request('category') == 'Analgesics' ? 'selected' : '' }}>Analgésiques</option>
-                            <option value="Antidepressants" {{ request('category') == 'Antidepressants' ? 'selected' : '' }}>Antidépresseurs</option>
-                            <option value="Antihistamines" {{ request('category') == 'Antihistamines' ? 'selected' : '' }}>Antihistaminiques</option>
-                            <option value="Antacids" {{ request('category') == 'Antacids' ? 'selected' : '' }}>Anti-acides</option>
+                            
                         </select>
                     </div>
                     
                     <div class="sm:col-span-2">
                         <select name="stock_status" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             <option value="">Tous les stocks</option>
-                            <option value="low" {{ request('stock_status') == 'low' ? 'selected' : '' }}>Stock Faible</option>
-                            <option value="out" {{ request('stock_status') == 'out' ? 'selected' : '' }}>En Rupture</option>
-                            <option value="normal" {{ request('stock_status') == 'normal' ? 'selected' : '' }}>Stock Normal</option>
+                           
                         </select>
                     </div>
                     
@@ -207,11 +203,11 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-10 w-10 bg-green-100 rounded-full flex items-center justify-center">
-                                            @if($med->pivot->stock == 0)
+                                            @if($med->quantity == 0)
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                                                 </svg>
-                                            @elseif($med->pivot->stock < 10)
+                                            @elseif($med->quantity < 10)
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                                 </svg>
@@ -229,39 +225,36 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                        {{ $med->category === 'Antibiotics' ? 'bg-purple-100 text-purple-800' : '' }}
-                                        {{ $med->category === 'Analgesics' ? 'bg-blue-100 text-blue-800' : '' }}
-                                        {{ $med->category === 'Antidepressants' ? 'bg-green-100 text-green-800' : '' }}
-                                        {{ $med->category === 'Antihistamines' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                        {{ $med->category === 'Antacids' ? 'bg-indigo-100 text-indigo-800' : '' }}">
-                                        {{ $med->category === 'Antibiotics' ? 'Antibiotiques' : 
-                                           ($med->category === 'Analgesics' ? 'Analgésiques' : 
-                                           ($med->category === 'Antidepressants' ? 'Antidépresseurs' : 
-                                           ($med->category === 'Antihistamines' ? 'Antihistaminiques' : 
-                                           ($med->category === 'Antacids' ? 'Anti-acides' : $med->category)))) }}
+                                        @if($med->category)
+                                            bg-blue-100 text-blue-800
+                                        @else
+                                            bg-gray-100 text-gray-800
+                                        @endif
+                                        flex items-center gap-1 w-max">
+                                        {{ $med->category ? $med->category->name : 'Non spécifié' }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    @if($med->pivot->stock == 0)
+                                    @if($med->quantity == 0)
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 flex items-center gap-1 w-max">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                             Rupture
                                         </span>
-                                    @elseif($med->pivot->stock < 10)
+                                    @elseif($med->quantity < 10)
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800 flex items-center gap-1 w-max">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01" />
                                             </svg>
-                                            {{ $med->pivot->stock }} (Faible)
+                                            {{ $med->quantity }} (Faible)
                                         </span>
                                     @else
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 flex items-center gap-1 w-max">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                             </svg>
-                                            {{ $med->pivot->stock }}
+                                            {{ $med->quantity }}
                                         </span>
                                     @endif
                                 </td>

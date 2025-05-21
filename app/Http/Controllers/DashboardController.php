@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Commande;
 use App\Models\Medication;
+use App\Models\Pharmacy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,11 +16,12 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         // Load pharmacy with counts and additional data
-        $pharmacy = $user->pharmacy()->withCount([
+        $pharmacy =Pharmacy::where('user_id', $user->id)->withCount([
             'medications',
-            'medications as low_stock_count' => fn($q) => $q->whereBetween('medication_pharmacy.stock', [1, 9]),
-            'medications as out_of_stock_count' => fn($q) => $q->where('medication_pharmacy.stock', 0)
+            'medications as low_stock_count' => fn($q) => $q->whereBetween('medications.quantity', [1, 9]),
+            'medications as out_of_stock_count' => fn($q) => $q->where('medications.quantity', 0)
         ])->first();
+       
 
         // Get all medications for quick add modal
         $allMedications = Medication::orderBy('name')->get();
@@ -26,43 +29,26 @@ class DashboardController extends Controller
         $commandes = Commande::simplePaginate(5);
     
         // Get medications if pharmacy exists with enhanced filtering
-        $medications = $pharmacy 
-            ? $pharmacy->medications()
-                ->withPivot('stock', 'price')
-                ->when($request->search, function($q, $search) {
-                    $q->where(function($query) use ($search) {
-                        $query->where('name', 'like', "%{$search}%")
-                              ->orWhere('generic_name', 'like', "%{$search}%");
-                    });
-                })
-                ->when($request->category, fn($q, $cat) => $q->where('category', $cat))
-                ->when($request->stock_status, function($q, $status) {
-                    if ($status === 'low') {
-                        $q->whereBetween('medication_pharmacy.stock', [1, 9]);
-                    } elseif ($status === 'out') {
-                        $q->where('medication_pharmacy.stock', 0);
-                    } elseif ($status === 'normal') {
-                        $q->where('medication_pharmacy.stock', '>=', 10);
-                    }
-                })
-                ->when($request->sort, function($q, $sort) use ($request) {
-                    $direction = $request->direction ?? 'asc';
-                    if ($sort === 'stock' || $sort === 'price') {
-                        $q->orderBy("medication_pharmacy.{$sort}", $direction);
-                    } else {
-                        $q->orderBy($sort, $direction);
-                    }
-                }, fn($q) => $q->orderBy('name'))
-                ->paginate(15)
-                ->withQueryString()
-            : collect();
-    
+        $medications = $pharmacy ? $pharmacy->medications()
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            })
+            ->when($request->filled('category'), function ($query) use ($request) {
+                $query->where('category', $request->category);
+            })
+            ->orderBy($request->sort ?? 'name', $request->direction ?? 'asc')
+            ->paginate(10)
+            : null;
+       
+
+        //   $total=$pharmcy->medications()->sum('price * quantity');
         return view('dashboard', [
             'pharmacy' => $pharmacy,
+            'totalValue'=>$pharmacy ? $pharmacy->medications()->selectRaw('sum(price * quantity) as total_value')->first()->total_value : 0,
             'medications' => $medications,
             'allMedications' => $allMedications,
             'commandes' => $commandes,
-            'categories' => Medication::distinct()->pluck('category'),
+            'categories' => Category::select('id', 'name')->get(),
             'sortDirection' => $request->direction === 'desc' ? 'desc' : 'asc',
             'currentSort' => $request->sort
         ]);

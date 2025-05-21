@@ -6,18 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pharmacy extends Model
 {
-    protected $fillable = [
-        'name',
-        'address',
-        'city',
-        'state',
-    ];
+    protected $guarded = ['id'];
 
         public function medications()
     {
-        return $this->belongsToMany(Medication::class)
-            ->withPivot(['price', 'stock'])
-            ->withTimestamps();
+        return $this->hasMany(Medication::class);
     }
 
     public function user()

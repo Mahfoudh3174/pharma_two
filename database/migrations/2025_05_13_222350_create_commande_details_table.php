@@ -14,9 +14,10 @@ return new class extends Migration
     {
         Schema::create('commande_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Commande::class);
+            $table->foreignId('commande_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('medication_id')->constrained()->cascadeOnDelete();
             $table->string("name");
-            $table->decimal("price");
+            $table->decimal("total_price");
             $table->integer("quantity");
             $table->timestamps();
         });

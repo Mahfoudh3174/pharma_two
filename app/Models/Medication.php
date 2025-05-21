@@ -14,10 +14,20 @@ class Medication extends Model
         'strength',
     ];
 
-    public function pharmacies()
+    public function pharmacy()
     {
-        return $this->belongsToMany(Pharmacy::class)
-            ->withPivot(['price', 'stock', 'last_restocked'])
+        return $this->belongsTo(Pharmacy::class);
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function commandes()
+    {
+        return $this->belongsToMany(Commande::class, 'commande_medications')
+            ->using(CommandeMedictation::class)
+            ->withPivot('quantity', 'total_price')
             ->withTimestamps();
     }
 }

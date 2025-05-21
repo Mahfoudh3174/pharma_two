@@ -30,13 +30,13 @@
                         <select id="category" name="category" required
                                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 @error('category') border-red-500 @enderror">
                             <option value="">Select Category</option>
-                            <option value="Antibiotics" {{ old('category') == 'Antibiotics' ? 'selected' : '' }}>Antibiotics</option>
-                            <option value="Analgesics" {{ old('category') == 'Analgesics' ? 'selected' : '' }}>Analgesics</option>
-                            <option value="Antidepressants" {{ old('category') == 'Antidepressants' ? 'selected' : '' }}>Antidepressants</option>
-                            <option value="Antihistamines" {{ old('category') == 'Antihistamines' ? 'selected' : '' }}>Antihistamines</option>
-                            <option value="Antacids" {{ old('category') == 'Antacids' ? 'selected' : '' }}>Antacids</option>
-                            <option value="Other" {{ old('category') == 'Other' ? 'selected' : '' }}>Other</option>
-                        </select>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                                
+                            @endforeach
+                           </select>
                         @error('category')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror

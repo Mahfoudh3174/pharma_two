@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Pharmacy\PharmacyRequest;
 use App\Models\Pharmacy;
 use App\Models\Medication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class PharmacyController extends Controller
@@ -27,27 +29,29 @@ class PharmacyController extends Controller
     /**
      * Store a newly created pharmacy.
      */
-    public function store(Request $request)
+    public function store(PharmacyRequest $request)
     {
+        
         // Validate pharmacist doesn't already have a pharmacy
         if (Auth::user()->pharmacy) {
             abort(403, 'You already have a pharmacy');
         }
+        
 
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:pharmacies'],
-            'address' => ['required', 'string'],
-            'city' => ['required', 'string'],
-            'state' => ['required', 'string'],
-  
+         
+        $pharmacy = DB::transaction(function () use ($request) {
+            $pharmacy =Pharmacy::create([
+            'name' => $request->name,
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'user_id' => Auth::id(),
         ]);
+        return $pharmacy;
 
-        $pharmacy = Pharmacy::create($validated);
 
-        // Associate pharmacy with the pharmacist
-        Auth::user()->update(['pharmacy_id' => $pharmacy->id]);
-
-        return redirect()->route('dashboard')
+    });
+        return to_route('dashboard')
             ->with('success', 'Pharmacy created successfully!');
     }
 

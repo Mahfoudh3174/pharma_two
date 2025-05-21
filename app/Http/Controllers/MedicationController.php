@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Pharmacy;
 use App\Models\Medication;
 use Illuminate\Http\Request;
@@ -12,14 +13,11 @@ class MedicationController extends Controller
 {
     public function create()
     {
-        $categories = [
-            'Antibiotics', 'Analgesics', 'Antidepressants', 
-            'Antihistamines', 'Antacids', 'Other'
-        ];
         
-        $pharmacies = Pharmacy::all(); 
+        
+        $categories = Category::all(); 
 
-        return view('medications.create', compact('categories', 'pharmacies'));
+        return view('medications.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -74,10 +72,7 @@ class MedicationController extends Controller
 
     public function edit(Medication $medication)
     {
-        $categories = [
-            'Antibiotics', 'Analgesics', 'Antidepressants',
-            'Antihistamines', 'Antacids', 'Other'
-        ];
+       
         
         $pharmacies = Pharmacy::all();
         $medication->load('pharmacies');

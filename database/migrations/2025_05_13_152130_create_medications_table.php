@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('medications', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('category');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('dosage_form');
             $table->string('strength');
+            $table->integer('price')->default(0);
+            $table->integer('quantity')->default(0);
+            $table->foreignId('pharmacy_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             
             // Indexes for fast searching
