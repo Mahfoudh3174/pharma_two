@@ -13,51 +13,46 @@ class MedicationController extends Controller
 {
     public function create()
     {
-        
-        
         $categories = Category::all(); 
-
         return view('medications.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
-        $user = Auth::user();
+        $pharmacy = Pharmacy::where('user_id', Auth::id())->first();
         
-        if (!$user->pharmacy) {
+        if (!$pharmacy) {
             return redirect()->back()->with('error', 'You must have a pharmacy to add medications');
         }
     
         $validated = $request->validate([
-             'name' => [
+            'name' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('medications')->where(function ($query) use ($user) {
-                    return $query->where('pharmacy_id', $user->pharmacy->id);
+                Rule::unique('medications')->where(function ($query) use ($pharmacy) {
+                    return $query->where('pharmacy_id', $pharmacy->id);
                 })
             ],
             'generic_name' => 'nullable|string|max:255',
-            'category' => 'required|string|max:255',
+            'category' => 'required|exists:categories,id',
             'dosage_form' => 'required|string|max:255',
             'strength' => 'required|string|max:50',
+            'barcode' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0', 
-            'stock' => 'required|integer|min:0' 
+            'quantity' => 'required|integer|min:0' 
         ]);
     
-        // Create or find the medication
-        $medication = Medication::firstOrCreate([
+        $medication = Medication::create([
             'name' => $validated['name'],
             'generic_name' => $validated['generic_name'],
-            'strength' => $validated['strength']
-        ], $validated);
-    
-        // Attach to current pharmacy with pivot data
-        $user->pharmacy->medications()->syncWithoutDetaching([
-            $medication->id => [
-                'price' => $validated['price'],
-                'stock' => $validated['stock']
-            ]
+            'strength' => $validated['strength'],
+            'price' => $validated['price'],
+            'quantity' => $validated['quantity'],
+            'barcode' => $validated['barcode'] ?? null,
+            'dosage_form' => $validated['dosage_form'],
+            'pharmacy_id' => $pharmacy->id,
+            'category_id' => $validated['category'],
         ]);
     
         return redirect()->route('dashboard')
@@ -66,45 +61,48 @@ class MedicationController extends Controller
 
     public function show(Medication $medication)
     {
-        $medication->load('pharmacies'); // Load pharmacy relationships
+        $medication->load('pharmacy');
         return view('medications.show', compact('medication'));
     }
 
     public function edit(Medication $medication)
     {
-       
-        
+        $categories = Category::all();
         $pharmacies = Pharmacy::all();
-        $medication->load('pharmacies');
-
+        
         return view('medications.edit', compact('medication', 'categories', 'pharmacies'));
     }
 
     public function update(Request $request, Medication $medication)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('medications')->ignore($medication->id)->where(function ($query) use ($medication) {
+                    return $query->where('pharmacy_id', $medication->pharmacy_id);
+                })
+            ],
             'generic_name' => 'nullable|string|max:255',
-            'category' => 'required|string|max:255',
+            'category' => 'required|exists:categories,id',
             'dosage_form' => 'required|string|max:255',
             'strength' => 'required|string|max:50',
-            'pharmacies' => 'sometimes|array',
-            'pharmacies.*.price' => 'required_with:pharmacies|numeric|min:0',
-            'pharmacies.*.stock' => 'required_with:pharmacies|integer|min:0'
+            'barcode' => 'nullable|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:0'
         ]);
 
-        $medication->update($validated);
-
-        if ($request->has('pharmacies')) {
-            $syncData = [];
-            foreach ($request->pharmacies as $pharmacyId => $data) {
-                $syncData[$pharmacyId] = [
-                    'price' => $data['price'],
-                    'stock' => $data['stock']
-                ];
-            }
-            $medication->pharmacies()->sync($syncData);
-        }
+        $medication->update([
+            'name' => $validated['name'],
+            'generic_name' => $validated['generic_name'],
+            'strength' => $validated['strength'],
+            'price' => $validated['price'],
+            'quantity' => $validated['quantity'],
+            'barcode' => $validated['barcode'] ?? null,
+            'dosage_form' => $validated['dosage_form'],
+            'category_id' => $validated['category'],
+        ]);
 
         return redirect()->route('dashboard')
             ->with('success', 'Medication updated successfully!');
@@ -112,9 +110,7 @@ class MedicationController extends Controller
 
     public function destroy(Medication $medication)
     {
-        $medication->pharmacies()->detach();
         $medication->delete();
-
         return redirect()->route('dashboard')
             ->with('success', 'Medication deleted successfully!');
     }

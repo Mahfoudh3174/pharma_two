@@ -7,11 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Medication extends Model
 {
 
-    protected $fillable = [
-        'name',
-        'category',
-        'dosage_form',
-        'strength',
+    protected $guarded = [
+        'id'
     ];
 
     public function pharmacy()

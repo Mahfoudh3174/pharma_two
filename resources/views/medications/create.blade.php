@@ -89,11 +89,11 @@
                 <div class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label for="stock" class="block text-sm font-medium text-gray-700 mb-1">Initial Stock *</label>
-                            <input type="number" id="stock" name="stock" value="{{ old('stock', 0) }}" 
+                            <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Initial quantity *</label>
+                            <input type="number" id="quantity" name="quantity" value="{{ old('quantity', 0) }}" 
                                    min="0" required
-                                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 @error('stock') border-red-500 @enderror">
-                            @error('stock')
+                                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 @error('quantity') border-red-500 @enderror">
+                            @error('quantity')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
