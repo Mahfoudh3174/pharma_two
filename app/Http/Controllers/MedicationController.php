@@ -24,6 +24,7 @@ class MedicationController extends Controller
         if (!$pharmacy) {
             return redirect()->back()->with('error', 'You must have a pharmacy to add medications');
         }
+        
     
         $validated = $request->validate([
             'name' => [
@@ -34,11 +35,11 @@ class MedicationController extends Controller
                     return $query->where('pharmacy_id', $pharmacy->id);
                 })
             ],
-            'generic_name' => 'nullable|string|max:255',
+            'generic_name' => 'required|string|max:255',
             'category' => 'required|exists:categories,id',
             'dosage_form' => 'required|string|max:255',
             'strength' => 'required|string|max:50',
-            'barcode' => 'nullable|string|max:255',
+            'barcode' => 'required|string|max:255',
             'price' => 'required|numeric|min:0', 
             'quantity' => 'required|integer|min:0' 
         ]);
@@ -61,16 +62,18 @@ class MedicationController extends Controller
 
     public function show(Medication $medication)
     {
+        
         $medication->load('pharmacy');
         return view('medications.show', compact('medication'));
     }
 
     public function edit(Medication $medication)
     {
+       
         $categories = Category::all();
-        $pharmacies = Pharmacy::all();
         
-        return view('medications.edit', compact('medication', 'categories', 'pharmacies'));
+        
+        return view('medications.edit', compact('medication', 'categories'));
     }
 
     public function update(Request $request, Medication $medication)

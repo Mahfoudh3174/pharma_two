@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('dosage_form');
             $table->string('strength');
+            $table->string('generic_name');
+            $table->string('barcode')->nullable();
             $table->integer('price')->default(0);
             $table->integer('quantity')->default(0);
             $table->foreignId('pharmacy_id')->constrained()->onDelete('cascade');

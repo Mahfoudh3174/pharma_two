@@ -1,14 +1,14 @@
-<x-app-layout title="Medication Categories">
+<x-app-layout title="Catégories de Médicaments">
     <div class="max-w-7xl mx-auto p-6 space-y-6">
-        <!-- Form Container -->
+        <!-- Formulaire de création -->
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Create New Category</h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Créer une nouvelle catégorie</h2>
             <form action="{{ route('categories.store') }}" method="POST" class="space-y-4">
                 @csrf
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
                     <div class="md:col-span-2">
-                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Category Name *</label>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nom de la catégorie *</label>
                         <input type="text" id="name" name="name" value="{{ old('name') }}" required 
                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 @error('name') border-red-500 @enderror">
                         @error('name')
@@ -22,22 +22,22 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                             </svg>
-                            Add Category
+                            Ajouter la catégorie
                         </button>
                     </div>
                 </div>
             </form>
         </div>
         
-        <!-- Categories List -->
+        <!-- Liste des catégories -->
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h2 class="text-xl font-semibold text-gray-800">Existing Categories</h2>
+                <h2 class="text-xl font-semibold text-gray-800">Catégories existantes</h2>
             </div>
             
             @if ($categories->isEmpty())
                 <div class="p-6 text-center text-gray-500">
-                    No categories found. Start by adding a new category above.
+                    Aucune catégorie trouvée. Commencez par ajouter une nouvelle catégorie ci-dessus.
                 </div>
             @else
                 <div class="overflow-x-auto">
@@ -45,10 +45,10 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Name
+                                    Nom
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Created At
+                                    Créée le
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Actions
@@ -62,7 +62,7 @@
                                         <div class="text-sm font-medium text-gray-900">{{ $category->name }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500">{{ $category->created_at->format('M d, Y') }}</div>
+                                        <div class="text-sm text-gray-500">{{ $category->created_at->format('d M Y') }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div class="flex justify-end space-x-2">
@@ -103,13 +103,13 @@
     <script>
         function confirmDelete(form) {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Êtes-vous sûr ?',
+                text: "Cette action est irréversible !",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Oui, supprimer !'
             }).then((result) => {
                 if (result.isConfirmed) {
                     form.submit();
