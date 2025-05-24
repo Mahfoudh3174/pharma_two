@@ -14,10 +14,11 @@ return new class extends Migration
     {
         Schema::create('commandes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained()->cascadeOnDelete();
-            $table->date("date");
-            $table->decimal("amount");
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            
+           
             $table->foreignId('pharmacy_id')->constrained()->cascadeOnDelete();
+            
             $table->enum("status",["inProgress","validated","rejected"])->default("inProgress");
             $table->text("reject_reason")->nullable();
             $table->timestamps();

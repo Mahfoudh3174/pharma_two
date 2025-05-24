@@ -344,14 +344,15 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {{$commande->uuid}}
                                 </td>
+                                
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{$commande->user->name}}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{$commande->date}}
+                                    {{$commande->created_at->format('d/m/Y H:i')}}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{$commande->amount}}
+                                    {{ $commande->medications->sum('pivot.total_price') }} UM
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">

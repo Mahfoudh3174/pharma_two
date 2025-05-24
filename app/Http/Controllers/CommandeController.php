@@ -8,11 +8,14 @@ use Illuminate\Http\Request;
 
 class CommandeController extends Controller
 {
-    public function details(Commande $commande)
+    public function details($id)
     {
-        $details = CommandeDetails::where("commande_id",$commande->id)->get();
+        $commande = Commande::with(["medications","user","pharmacy"])
+            ->where("id", $id)
+
+            ->first();
    
-        return view("commandes.details",compact("details","commande"));
+        return view("facture.index",compact("commande"));
     }
     
     public function validate(Commande $commande)

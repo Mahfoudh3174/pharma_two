@@ -3,9 +3,9 @@
         <!-- Header with back button -->
         <div class="flex justify-between items-center mb-6">
             <div>
-                <h1 class="text-xl sm:text-2xl font-bold text-gray-900">{{$commande->uuid}}</h1>
+                
                 <p class="text-gray-600 mt-1">
-                    Client: <span class="font-medium">{{$commande->user->name}}</span>
+                    Client: <span class="font-medium">{{$commande->client->name}}</span>
                 </p>
             </div>
             <a href="{{ route('dashboard') }}" class="text-blue-600 hover:text-blue-800 text-sm">

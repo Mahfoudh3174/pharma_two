@@ -26,7 +26,17 @@ class DashboardController extends Controller
         // Get all medications for quick add modal
         $allMedications = Medication::orderBy('name')->get();
 
-        $commandes = Commande::simplePaginate(5);
+        $commandes =$pharmacy ? Commande::with(['user','medications'])->where('pharmacy_id', $pharmacy->id)
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $query->where('reference', 'like', '%' . $request->search . '%');
+            })
+            ->when($request->filled('status'), function ($query) use ($request) {
+                $query->where('status', $request->status);
+            })
+            ->orderBy($request->sort ?? 'created_at', $request->direction ?? 'desc')
+            ->paginate(10)
+            : null
+            ;
     
         // Get medications if pharmacy exists with enhanced filtering
         $medications = $pharmacy ? $pharmacy->medications()

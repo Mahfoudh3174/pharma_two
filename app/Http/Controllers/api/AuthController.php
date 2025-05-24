@@ -14,7 +14,9 @@ class AuthController
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'nullable|string|max:15|unique:users|regex:/^[2-4][0-9]{7}$/',
             'password' => 'required|string|min:8',
+            'password_confirmation' => 'required|string|min:8|same:password',
         ]);
 
         $user = User::create([
@@ -28,7 +30,7 @@ class AuthController
         return response()->json([
             'user' => $user,
             'token' => $token,
-        ], 201);
+        ], 200);
     }
 
     public function login(Request $request)

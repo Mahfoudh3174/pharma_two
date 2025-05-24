@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Commande extends Model
 {
+    use \Illuminate\Database\Eloquent\Factories\HasFactory;
     protected $fillable = [
         "user_id",
         "date",
@@ -14,12 +15,12 @@ class Commande extends Model
         "reject_reason",
     ];
 
-    public function client()
+    public function user()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(User::class);
     }
     public function medications(){
-        return $this->hasMany(Medication::class,'commande_medications')
+        return $this->belongsToMany(Medication::class,'commande_medications')
         ->using(CommandeMedictation::class)
         ->withPivot('quantity', 'total_price')
         ->withTimestamps()

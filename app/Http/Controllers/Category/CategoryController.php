@@ -11,7 +11,7 @@ class CategoryController extends Controller
     public function index()
     {
         // Fetch all categories
-        $categories = Category::paginate(PAGINATE);
+        $categories = Category::whereRelation('pharmacy', 'user_id', auth()->user()->id)->paginate(PAGINATE);
 
         return view('categories.index', compact('categories'));
     }
@@ -23,7 +23,10 @@ class CategoryController extends Controller
         ]);
 
         // Create a new category
-        Category::create($request->only('name'));
+        Category::create([
+            'name' => $request->name,
+            'pharmacy_id' => auth()->user()->pharmacy->id, // Assuming the user has a pharmacy
+        ]);
 
         return redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
