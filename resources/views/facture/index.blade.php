@@ -14,8 +14,8 @@
                     <p class="text-blue-100">Date: {{ $commande->created_at->format('d/m/Y') }}</p>
                     <p class="text-blue-100">Status: 
                         <span class="px-2 py-1 rounded-full text-xs font-semibold 
-                            @if($commande->status == 'validated') bg-green-100 text-green-800
-                            @elseif($commande->status == 'rejected') bg-red-100 text-red-800
+                            @if($commande->status == 'validee') bg-green-100 text-green-800
+                            @elseif($commande->status == 'rejetee') bg-red-100 text-red-800
                             @else bg-yellow-100 text-yellow-800 @endif">
                             {{ ucfirst($commande->status) }}
                         </span>
@@ -94,7 +94,7 @@
         </div>
 
         <!-- Rejection Reason (if applicable) -->
-        @if($commande->status == 'rejected' && $commande->reject_reason)
+        @if($commande->status == 'rejetee' && $commande->reject_reason)
         <div class="p-6 bg-red-50 border-t">
             <h2 class="text-lg font-semibold mb-2 text-red-800">Rejection Reason</h2>
             <p class="text-red-700">{{ $commande->reject_reason }}</p>

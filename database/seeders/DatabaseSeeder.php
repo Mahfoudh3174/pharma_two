@@ -17,36 +17,44 @@ class DatabaseSeeder extends Seeder
         $faker = \Faker\Factory::create();
 
         // Create admin user
-        User::create([
+        $admin=User::create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
             'password' => Hash::make('0'),
         ]);
 
         // Create regular users
-        $users = User::factory(10)->create();
+        $users = User::factory(10)->create([
+            'password' => Hash::make('0'), 
+        ]);
         
         // Create categories
-        $categories = Category::factory(10)->create();
+       
         
         // Create pharmacies with owners
-        $pharmacies = Pharmacy::factory(10)->create([
-            'user_id' => fn() => $users->random()->id,
+        $pharmacies = Pharmacy::factory(1)->create([
+            'user_id' => function() use ($admin) {
+                return $admin->id; // Assign the admin user as the owner of the pharmacy
+            },
         ]);
+         $categories = Category::factory(10)->create([
+            'pharmacy_id' => fn() => $pharmacies->first()->id, // Assign categories to the first pharmacy
+        ]);
+        
         
         // Create medications
         $medications = Medication::factory(50)->create([
             'category_id' => fn() => $categories->random()->id,
-            'pharmacy_id' => fn() => $pharmacies->random()->id,
+            'pharmacy_id' => fn() => $pharmacies->first()->id, // Assign medications to the first pharmacy
         ]);
         
         // Create orders
         $commandes = Commande::factory(20)->create([
-            'pharmacy_id' => fn() => $pharmacies->random()->id,
-            'status' => fn() => $faker->randomElement(['inProgress', 'validated', 'rejected']),
+            'pharmacy_id' => fn() => $pharmacies->first()->id, // Assign orders to the first pharmacy
+            'status' => fn() => $faker->randomElement(["enCours","validee","rejetee"]),
             'user_id' => fn() => $users->random()->id,
             'reject_reason' => fn(array $attributes) => 
-                $attributes['status'] === 'rejected' 
+                $attributes['status'] === 'rejetee' 
                     ? $faker->sentence() 
                     : null,
         ]);

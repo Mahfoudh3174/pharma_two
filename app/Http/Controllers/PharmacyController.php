@@ -12,6 +12,8 @@ use Illuminate\Validation\Rule;
 
 class PharmacyController extends Controller
 {
+
+    
     /**
      * Show the form for creating a new pharmacy.
      */

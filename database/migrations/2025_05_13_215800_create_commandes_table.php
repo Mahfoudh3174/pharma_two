@@ -5,31 +5,30 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+// Crée et retourne une nouvelle classe de migration
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Exécuter les migrations.
      */
     public function up(): void
     {
+        // Créer la table "commandes"
         Schema::create('commandes', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            
-           
-            $table->foreignId('pharmacy_id')->constrained()->cascadeOnDelete();
-            
-            $table->enum("status",["inProgress","validated","rejected"])->default("inProgress");
-            $table->text("reject_reason")->nullable();
-            $table->timestamps();
+            $table->id(); // Identifiant
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete(); // ID de l'utilisateur
+            $table->foreignId('pharmacy_id')->constrained()->cascadeOnDelete(); // ID de la pharmacie
+            $table->enum("status",["enCours","validee","rejetee"])->default("enCours"); // Statut
+            $table->text("reject_reason")->nullable(); // Raison du rejet
+            $table->timestamps(); // Horodatage créé et mis à jour
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Annuler les migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('commandes');
+        Schema::dropIfExists('commandes'); // Supprimer la table "commandes"
     }
 };

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,5 +23,10 @@ class AppServiceProvider extends ServiceProvider
     {
         
         Model::automaticallyEagerLoadRelationships();
+        JsonResource::withoutWrapping();
+
+        \Carbon\Carbon::serializeUsing(function ($carbon) {
+            return $carbon->format('Y-m-d H:i:s');
+        });
     }
 }

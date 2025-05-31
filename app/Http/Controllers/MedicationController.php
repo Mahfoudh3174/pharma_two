@@ -44,6 +44,7 @@ class MedicationController extends Controller
             'strength' => 'required|string|max:50',
             'barcode' => 'required|string|max:255',
             'price' => 'required|numeric|min:0', 
+            'image' => 'required|image|mimes:svg,SVG|max:2048',
             'quantity' => 'required|integer|min:0' 
         ]);
     

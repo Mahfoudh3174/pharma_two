@@ -44,5 +44,10 @@ Route::middleware('auth:sanctum')->group(function () {
         return response()->json($request->user());
     });
 
+    Route::prefix('pharmacies')->group(function () {
+        Route::get('/', [\App\Http\Controllers\api\PharmacyController::class, 'index']);
+        Route::get('/{id}', [\App\Http\Controllers\api\PharmacyController::class, 'show']);
+    });
+
     Route::post('/logout', [AuthController::class, 'logout']);
 });

@@ -30,7 +30,7 @@ class CommandeController extends Controller
         $commande = Commande::findOrFail($request->order_id);
 
 
-        $commande->update(["status" => "rejected", "reject_reason" => $request->reject_reason]);
+        $commande->update(["status" => "rejetee", "reject_reason" => $request->reject_reason]);
 
         return back()->with("success","commande rejected.");
     }
