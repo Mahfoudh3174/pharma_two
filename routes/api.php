@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\User;
+
+use App\Models\Pharmacy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\AuthController;
@@ -29,6 +30,15 @@ Route::post('/login', function (Request $request) {
         }
 
         $user = $request->user();
+
+        $hasPharmacy = Pharmacy::where('user_id', $user->id)->exists();
+
+    if ($hasPharmacy) {
+        throw ValidationException::withMessages([
+            'user' => ['Invalid user. This account is linked to a pharmacy.'],
+        ]);
+    }
+        
         $token = $user->createToken('tokenn')->plainTextToken;
 
         return response()->json([
