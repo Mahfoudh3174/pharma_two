@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id(); // Identifiant
             $table->foreignId('user_id')->constrained()->cascadeOnDelete(); // ID de l'utilisateur
             $table->foreignId('pharmacy_id')->constrained()->cascadeOnDelete(); // ID de la pharmacie
-            $table->enum("status",["enCours","validee","rejetee"])->default("enCours"); // Statut
+            $table->enum("status",["ENCOURS","VALIDEE","REJETEE"])->default("ENCOURS"); // Statut
             $table->text("reject_reason")->nullable(); // Raison du rejet
             $table->timestamps(); // Horodatage créé et mis à jour
         });

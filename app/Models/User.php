@@ -55,6 +55,7 @@ class User extends Authenticatable
         return $this->hasOne(Pharmacy::class);
     }
 
+
     public function commandes()
     {
         return $this->hasMany(Commande::class);

@@ -15,6 +15,7 @@ class Medication extends Model
     {
         return $this->belongsTo(Pharmacy::class);
     }
+ 
     public function category()
     {
         return $this->belongsTo(Category::class);

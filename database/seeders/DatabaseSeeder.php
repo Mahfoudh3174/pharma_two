@@ -67,7 +67,6 @@ class DatabaseSeeder extends Seeder
                 $quantity = $faker->numberBetween(1, 10);
                 $commande->medications()->attach($med->id, [
                     'quantity' => $quantity,
-                    'price' => $med->price, 
                     'total_price' => $med->price * $quantity,
                 ]);
             });

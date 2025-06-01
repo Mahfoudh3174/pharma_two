@@ -58,6 +58,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [\App\Http\Controllers\api\PharmacyController::class, 'index']);
         Route::get('/{id}', [\App\Http\Controllers\api\PharmacyController::class, 'show']);
     });
+    //orders
+    Route::prefix('orders')->group(function () {
+        Route::post('/', [\App\Http\Controllers\api\CommandeController::class, 'store']);
+        Route::get('/', [\App\Http\Controllers\api\CommandeController::class, 'index']);
+        Route::get('/{id}', [\App\Http\Controllers\api\CommandeController::class, 'show']);
+        Route::put('/{id}/validate', [\App\Http\Controllers\api\CommandeController::class, 'validate']);
+        Route::put('/{id}/reject', [\App\Http\Controllers\api\CommandeController::class, 'reject']);
+    });
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });

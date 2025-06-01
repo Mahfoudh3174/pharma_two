@@ -21,10 +21,11 @@ class MedicationResource extends JsonResource
             'dosage_form' => $this->dosage_form,
             'strength' => $this->strength,
             'barcode' => $this->barcode,
+        'pivot_quantity' => $this->pivot->quantity ?? null,
+        'total_price' => $this->pivot->total_price ?? null,
             'price' => $this->price,
             'quantity' => $this->quantity,
-            'category' => new CategoryResource($this->whenLoaded('category')),
-
+            'category' => $this->category ? new CategoryResource($this->category) : null,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
