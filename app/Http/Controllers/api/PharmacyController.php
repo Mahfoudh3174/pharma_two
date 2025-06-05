@@ -24,6 +24,11 @@ class PharmacyController extends Controller
     
     $medications = $pharmacy->medications()
     ->with(['category'])
+    ->where('quantity', '>', 0) // Ensure only medications with quantity > 0 are returned
+    ->when($request->search, function ($query) use ($request) {
+        $query->where('name', 'like', '%' . $request->search . '%')
+              ->orWhere('generic_name', 'like', '%' . $request->search . '%');
+    })
         ->orderBy('id', 'desc')
     ->cursorPaginate(PAGINATE, ['*'], 'cursor', $request->cursor ? $request->cursor : null); 
     

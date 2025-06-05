@@ -25,6 +25,7 @@ class MedicationFactory extends Factory
             'dosage_form' => $this->faker->randomElement(['Tablet', 'Capsule', 'Syrup', 'Injection', 'Ointment']),
             'strength' => $this->faker->randomElement(['500mg', '250mg', '100mg', '50mg', '10mg']),
             'generic_name' => $this->faker->word(),
+            'image' =>"medications/oc0VdjEV9UxqIdBDwN2e9Y87xLkr9vUdwsTZXL0z.png",
             'barcode' => $this->faker->word(),
             'price' => $this->faker->numberBetween(50, 1000),
             'quantity' => $this->faker->numberBetween(0, 1000),
