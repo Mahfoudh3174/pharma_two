@@ -2,7 +2,9 @@
 
 
 use App\Models\Pharmacy;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\AuthController;
 use Illuminate\Validation\ValidationException;
@@ -15,6 +17,8 @@ Route::post('/login', function (Request $request) {
             'credential' => 'required|string',
             'password' => 'required|string',
         ]);
+
+
         
 
         // Determine if identifier is email or phone
@@ -49,7 +53,7 @@ Route::post('/login', function (Request $request) {
 });
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         return response()->json($request->user());
     });
@@ -69,3 +73,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+
+
+

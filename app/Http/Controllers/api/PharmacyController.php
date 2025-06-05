@@ -16,7 +16,7 @@ class PharmacyController extends Controller
         // Fetch all pharmacies
         $pharmacies = Pharmacy::with(['categories', 'medications.category'])->get();
 
-        return response()->json(PharmacyResource::collection($pharmacies), 200);
+        return response()->json(['pharmacies'=>PharmacyResource::collection($pharmacies)], 200);
     }
   public function show(Request $request,$id)
 {
