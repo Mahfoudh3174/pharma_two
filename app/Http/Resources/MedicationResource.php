@@ -24,6 +24,7 @@ class MedicationResource extends JsonResource
         'pivot_quantity' => $this->pivot->quantity ?? null,
         'total_price' => $this->pivot->total_price ?? null,
             'price' => $this->price,
+            'imageUrl' => $this->image ?? null,
             'quantity' => $this->quantity,
             'category' => $this->category ? new CategoryResource($this->category) : null,
             'created_at' => $this->created_at,

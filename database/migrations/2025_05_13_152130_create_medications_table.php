@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('dosage_form');
             $table->string('strength');
             $table->string('generic_name');
+           
             $table->string('barcode');
             $table->string('image')->nullable();
             $table->decimal('price')->default(0);

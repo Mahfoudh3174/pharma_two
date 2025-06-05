@@ -23,6 +23,8 @@ class CommandeFactory extends Factory
             'pharmacy_id' => Pharmacy::factory(),
             'status' => $this->faker->randomElement(['inProgress', 'validated', 'rejected']),
             'reject_reason' => $this->faker->optional(0.3)->sentence(),
+            'longitude' => $this->faker->optional(0.5)->latitude(),
+            'latitude' => $this->faker->optional(0.5)->longitude(),
         ];
     }
 }
