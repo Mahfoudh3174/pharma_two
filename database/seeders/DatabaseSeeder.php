@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
         // Create orders
         $commandes = Commande::factory(20)->create([
             'pharmacy_id' => fn() => $pharmacies->first()->id, // Assign orders to the first pharmacy
-            'status' => fn() => $faker->randomElement(["enCours","validee","rejetee"]),
+            'status' => fn() => $faker->randomElement(["ENCOURS","VALIDEE","REJETEE"]),
             'user_id' => fn() => $users->random()->id,
             'reject_reason' => fn(array $attributes) =>
                 $attributes['status'] === 'REJETEE'

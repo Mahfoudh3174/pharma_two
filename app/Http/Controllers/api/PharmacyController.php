@@ -21,7 +21,7 @@ class PharmacyController extends Controller
   public function show(Request $request,$id)
 {
     $pharmacy = Pharmacy::findOrFail($id);
-    
+
     $medications = $pharmacy->medications()
     ->with(['category'])
     ->where('quantity', '>', 0) // Ensure only medications with quantity > 0 are returned
@@ -29,16 +29,22 @@ class PharmacyController extends Controller
         $query->where('name', 'like', '%' . $request->search . '%')
               ->orWhere('generic_name', 'like', '%' . $request->search . '%');
     })
+    ->when($request->category_id, function ($query) use ($request) {
+        $query->whereHas('category', function ($categoryQuery) use ($request) {
+            $categoryQuery->where('id', $request->category_id);
+        });
+    })
         ->orderBy('id', 'desc')
-    ->cursorPaginate(PAGINATE, ['*'], 'cursor', $request->cursor ? $request->cursor : null); 
-    
+         ->get();
+            // ->cursorPaginate(PAGINATE, ['*'], 'cursor', $request->cursor ? $request->cursor : null);
+
     return response()->json([
         'medications' => MedicationResource::collection($medications),
-        'meta' => [
-            'next_cursor' => $medications->nextCursor()?->encode(),
-            'per_page' => $medications->perPage(),
-            'has_more' => $medications->hasMorePages()
-        ]
+        // 'meta' => [
+        //     'next_cursor' => $medications->nextCursor()?->encode(),
+        //     'per_page' => $medications->perPage(),
+        //     'has_more' => $medications->hasMorePages()
+        // ]
     ]);
 }
 }

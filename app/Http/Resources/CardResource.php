@@ -16,14 +16,8 @@ class CardResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'medication_id' => $this->medication_id,
             'quantity' => $this->quantity,
-            'total_price' => $this->medication->price * $this->quantity, 
-            'medication' => [
-                'name' => $this->medication->name,
-                'description' => $this->medication->description,
-                'price' => $this->medication->price,
-            ],
+            'medications' => $this->whenLoaded('medications', new MedicationResource($this->medication)),
         ];
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\CardController;
 use App\Models\Pharmacy;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,11 +20,11 @@ Route::post('/login', function (Request $request) {
         ]);
 
 
-        
+
 
         // Determine if identifier is email or phone
-        $field = filter_var($request->credential, FILTER_VALIDATE_EMAIL) 
-            ? 'email' 
+        $field = filter_var($request->credential, FILTER_VALIDATE_EMAIL)
+            ? 'email'
             : 'phone';
 
         // Attempt authentication
@@ -42,7 +43,7 @@ Route::post('/login', function (Request $request) {
             'user' => ['Invalid user. This account is linked to a pharmacy.'],
         ]);
     }
-        
+
         $token = $user->createToken('tokenn')->plainTextToken;
 
         return response()->json([
@@ -69,6 +70,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}', [\App\Http\Controllers\api\CommandeController::class, 'show']);
         Route::put('/{id}/validate', [\App\Http\Controllers\api\CommandeController::class, 'validate']);
         Route::put('/{id}/reject', [\App\Http\Controllers\api\CommandeController::class, 'reject']);
+    });
+    //cart
+    Route::prefix('cart')->group(function () {
+        Route::post('/', [CardController::class,'store']);
+        Route::get('/', [CardController::class, 'index']);
+        Route::delete('/{id}', [CardController::class,'destroy']);
+        Route::get('/{id}', [CardController::class,'show']);
     });
 
     Route::post('/logout', [AuthController::class, 'logout']);

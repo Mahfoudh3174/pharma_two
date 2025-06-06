@@ -11,11 +11,16 @@ class Medication extends Model
         'id'
     ];
 
+    public function cards()
+    {
+        return $this->hasMany(Card::class);
+    }
+
     public function pharmacy()
     {
         return $this->belongsTo(Pharmacy::class);
     }
- 
+
     public function category()
     {
         return $this->belongsTo(Category::class);
