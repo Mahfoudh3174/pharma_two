@@ -14,7 +14,13 @@ class PharmacyController extends Controller
     public function index(Request $request)
     {
         // Fetch all pharmacies
-        $pharmacies = Pharmacy::with(['categories', 'medications.category'])->get();
+        $pharmacies = Pharmacy::with(['categories', 'medications.category'])
+        ->when($request->search, function ($query) use ($request) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+
+        })->
+
+        get();
 
         return response()->json(['pharmacies'=>PharmacyResource::collection($pharmacies)], 200);
     }

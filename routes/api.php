@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Http\Controllers\CardController;
+use App\Http\Controllers\api\CardController;
 use App\Models\Pharmacy;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -75,12 +75,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('cart')->group(function () {
         Route::post('/', [CardController::class,'store']);
         Route::get('/', [CardController::class, 'index']);
-        Route::delete('/{id}', [CardController::class,'destroy']);
-        Route::get('/{id}', [CardController::class,'show']);
+        Route::delete('/{id}', [CardController::class,'delete']);
+        Route::get('/cart-count/{id}', [CardController::class,'show']);
     });
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+        Route::get('/cart', [CardController::class, 'index']);
+
 
 
 
