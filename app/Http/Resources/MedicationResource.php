@@ -29,6 +29,7 @@ class MedicationResource extends JsonResource
             'category' => $this->category ? new CategoryResource($this->category) : null,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'pharmacy' => new PharmacyResource($this->whenLoaded('pharmacy')),
         ];
     }
 }

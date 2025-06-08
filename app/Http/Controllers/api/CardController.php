@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CardResource;
+use App\Http\Resources\MedicationResource;
 use App\Models\Card;
 use App\Models\Medication;
 use Auth;
@@ -14,38 +15,69 @@ use Log;
 class CardController extends Controller
 {
 
-    public function index(){
-        Auth::loginUsingId(12);
-          $userId = Auth::id();
 
+public function index(Request $request) {
+    $userId = Auth::id();
+    $pharmacyId = $request->pharmacy_id;
+    Log::info("Fetching cart for user: " . $userId);
 
-    $cartItems = Card::select('product_id', DB::raw('count(*) as quantity'))
-        ->with(['medication.pharmacy','medication.category'])
+    Log::info("Fetching cart for pharmacy: " . $pharmacyId);
+
+    // اجلب كل الكروت للمستخدم (مع الأدوية المرتبطة والفئات والصيدليات)
+    $cards = Card::with(['medication.pharmacy', 'medication.category'])
         ->where('user_id', $userId)
-        ->groupBy('product_id')
+        ->when($pharmacyId, function ($query) use ($pharmacyId) {
+            $query->whereHas('medication', function ($q) use ($pharmacyId) {
+                $q->where('pharmacy_id', $pharmacyId);
+            });
+        })
         ->get();
-        dd($cartItems);
-        dd( CardResource::collection($cartItems));
-        // Log::info('User card', ['user_items' =>]);
+   Log::info("Fetched cards: ", $cards->toArray());
 
-    }
+    
+    $grouped = $cards->groupBy('medication_id')->map(function ($items) {
+        $medication = $items->first()->medication;
+        $quantity = $items->count();
+        $totalPrice = $medication->price * $quantity;
+
+        return [
+            'id' => $items->first()->id,
+            'quantity' => $quantity,
+            'total_price' => $totalPrice,
+            'medication' => new MedicationResource($medication),
+        ];
+    })->values();
+
+
+    $totalPrice = $grouped->sum('total_price');
+    $totalItems = $grouped->count();
+
+    return response()->json([
+        'cartItems' => $grouped,
+        'totalCard' => $totalPrice,
+        'totalItems' => $totalItems,
+        'pharmacy_id' => $pharmacyId
+    ]);
+}
+
 
     public function store(Request $request)
     {
 
         $validatedData = $request->validate([
             'medication_id' => 'required|exists:medications,id',
+            'pharmacy_id' => 'required|exists:pharmacies,id',
         ]);
         $user=Auth::user();
         $card=Card::create([
             'user_id'=>$user->id,
             'medication_id'=>$validatedData['medication_id'],
-
+            'pharmacy_id'=>$validatedData['pharmacy_id']
         ]);
 
         return response()->json([
             'message'=>'success',
-            "count"=>$user->cards()->where('medication_id', $validatedData['medication_id'])->count()
+            // "count"=>$user->cards()->where('medication_id', $validatedData['medication_id'])->count()
         ]);
 
 
@@ -53,7 +85,6 @@ class CardController extends Controller
 
     public function show($id){
         $count=Auth::user()->cards()->where('medication_id', $id)->count();
-        Log::info('User created', ['user_items_count' => $count]);
         return response()->json([
             'count'=>$count
         ]);

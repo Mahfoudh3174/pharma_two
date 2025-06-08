@@ -17,4 +17,8 @@ class Card extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function pharmacy()
+    {
+        return $this->belongsTo(Pharmacy::class);
+    }
 }
