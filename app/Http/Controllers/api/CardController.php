@@ -19,9 +19,7 @@ class CardController extends Controller
 public function index(Request $request) {
     $userId = Auth::id();
     $pharmacyId = $request->pharmacy_id;
-    Log::info("Fetching cart for user: " . $userId);
 
-    Log::info("Fetching cart for pharmacy: " . $pharmacyId);
 
     // اجلب كل الكروت للمستخدم (مع الأدوية المرتبطة والفئات والصيدليات)
     $cards = Card::with(['medication.pharmacy', 'medication.category'])
@@ -32,9 +30,8 @@ public function index(Request $request) {
             });
         })
         ->get();
-   Log::info("Fetched cards: ", $cards->toArray());
 
-    
+
     $grouped = $cards->groupBy('medication_id')->map(function ($items) {
         $medication = $items->first()->medication;
         $quantity = $items->count();

@@ -7,15 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Commande extends Model
 {
     use \Illuminate\Database\Eloquent\Factories\HasFactory;
-    protected $fillable = [
-        "user_id",
-        "date",
-        "status",
-        "amount",
-        "reject_reason",
-        "pharmacy_id",
-        "longitude",
-        "latitude",
+    protected $guarded = [
+        'id'
     ];
 
     public function user()
@@ -27,7 +20,7 @@ class Commande extends Model
         ->using(CommandeMedictation::class)
         ->withPivot('quantity', 'total_price')
         ->withTimestamps()
- 
+
         ;
     }
     public function pharmacy()

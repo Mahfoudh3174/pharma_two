@@ -45,8 +45,10 @@ class DatabaseSeeder extends Seeder
         // Create medications
         $medications = Medication::factory(50)->create([
             'category_id' => fn() => $categories->random()->id,
+            'image' => fn() => "medications/uF8qCiQMgLZ5y06jlbVVsLJhNlngBU7JGh7PoKZc.jpg",
             'pharmacy_id' => fn() => $pharmacies->first()->id, // Assign medications to the first pharmacy
         ]);
+
 
         // Create orders
         $commandes = Commande::factory(20)->create([
@@ -57,6 +59,9 @@ class DatabaseSeeder extends Seeder
                 $attributes['status'] === 'REJETEE'
                     ? $faker->sentence()
                     : null,
+            'total_amount' => $faker->randomFloat(2, 50, 1000)
+
+
         ]);
 
         // Attach medications to orders - CORRECTED VERSION

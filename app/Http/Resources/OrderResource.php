@@ -19,13 +19,12 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'status' => $this->status,
             'reject_reason' => $this->reject_reason,
-            'total_bill' => DB::table('commande_medications')
-                ->where('commande_id', $this->id)
-                ->sum(DB::raw('total_price')),
+            'total_amount' => $this->total_amount,
+            'type' => $this->type,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'pharmacy' =>new PharmacyResource($this->whenLoaded('pharmacy')),
-            'medications' =>MedicationResource::collection($this->whenLoaded('medications')),   
+            'medications' =>MedicationResource::collection($this->whenLoaded('medications')),
         ];
     }
 }
