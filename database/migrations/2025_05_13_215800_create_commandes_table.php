@@ -24,7 +24,7 @@ return new class extends Migration
             $table->decimal('longitude', 10, 7)->nullable(); // Longitude
             $table->decimal('latitude', 10, 7)->nullable(); // Latitude
             $table->enum('type', ["LIVRAISON", "SURE PLACE"])->nullable();
-            $table->timestamps(); // Horodatage créé et mis à jour
+            $table->timestamps();
         });
     }
 
