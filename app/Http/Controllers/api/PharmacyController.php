@@ -17,7 +17,6 @@ class PharmacyController extends Controller
         $pharmacies = Pharmacy::with(['categories', 'medications.category'])
         ->when($request->search, function ($query) use ($request) {
             $query->where('name', 'like', '%' . $request->search . '%');
-
         })->
 
         get();
@@ -42,6 +41,7 @@ class PharmacyController extends Controller
     })
         ->orderBy('id', 'desc')
          ->get();
+         Log::info('$medications: '. $medications->count());
             // ->cursorPaginate(PAGINATE, ['*'], 'cursor', $request->cursor ? $request->cursor : null);
 
     return response()->json([

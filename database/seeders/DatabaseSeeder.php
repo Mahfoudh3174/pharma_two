@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
         // Create medications
         $medications = Medication::factory(50)->create([
             'category_id' => fn() => $categories->random()->id,
-            'image' => fn() => "medications/uF8qCiQMgLZ5y06jlbVVsLJhNlngBU7JGh7PoKZc.jpg",
+            'image' => fn() => "medications/oc0VdjEV9UxqIdBDwN2e9Y87xLkr9vUdwsTZXL0z.png",
             'pharmacy_id' => fn() => $pharmacies->first()->id, // Assign medications to the first pharmacy
         ]);
 

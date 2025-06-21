@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get("commandes/details/{commande}",[CommandeController::class, "details"])->name("commandes.details");
     Route::get("commandes/validate/{commande}",[CommandeController::class, "validate"])->name("commandes.validate");
     Route::post("commandes/reject",[CommandeController::class, "reject"])->name("commandes.reject");
+    // Route::get('/commandes/show/{commande}', [CommandeController::class, 'show'])->name('commandes.show');
 });
 
 

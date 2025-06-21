@@ -47,6 +47,8 @@ class PharmacyController extends Controller
             'address' => $request->address,
             'city' => $request->city,
             'state' => $request->state,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
             'user_id' => Auth::id(),
         ]);
         return $pharmacy;

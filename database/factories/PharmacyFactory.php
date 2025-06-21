@@ -22,6 +22,8 @@ class PharmacyFactory extends Factory
             'address' => $this->faker->address(),
             'city' => $this->faker->city(),
             'state' => $this->faker->state(),
+            'latitude' => $this->faker->latitude(),
+            'longitude' => $this->faker->longitude(),
             'user_id' => \App\Models\User::factory(),
             'created_at' => now(),
             'updated_at' => now(),

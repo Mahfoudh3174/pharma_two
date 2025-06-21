@@ -8,7 +8,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-2xl font-bold">Pharmacy Invoice</h1>
-                    <p class="text-blue-100">Order #{{ $commande->id }}</p>
+                    <p class="text-blue-100">Order #{{ $commande->reference }}</p>
                 </div>
                 <div class="text-right">
                     <p class="text-blue-100">Date: {{ $commande->created_at->format('d/m/Y') }}</p>
@@ -104,7 +104,7 @@
         <!-- Invoice Footer -->
         <div class="bg-gray-100 px-6 py-4 text-center text-sm text-gray-600">
             <p>Thank you for your order! For any questions, please contact our pharmacy.</p>
-            <p class="mt-1">© {{ date('Y') }} {{ $commande->pharmacy->name }}. All rights reserved.</p>
+            <p class="mt-1">© {{ date('Y') }} {{ $commande->pharmacy->name }}</p>
         </div>
     </div>
 </div>

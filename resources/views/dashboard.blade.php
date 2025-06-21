@@ -471,12 +471,17 @@ function sortTable(columnIndex, isNumeric = false) {
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div class="flex justify-end space-x-2">
-                                        <a href="{{route("commandes.validate", $commande->id)}}" class="text-green-600 hover:text-green-900">
+                                        @if ($commande->status != "VALIDEE" && $commande->status != "REJETEE")
+                                            <a href="{{route("commandes.validate", $commande->id)}}" class="text-green-600 hover:text-green-900">
                                             Valider
-                                        </a>
-                                        <button onclick="showRejectModal({{$commande->id}})" class="text-red-600 hover:text-red-900">
+                                        </a> 
+                                        @endif
+                                       
+                                        @if ($commande->status != "REJETEE" && $commande->status != "VALIDEE")
+                                            <button onclick="showRejectModal({{$commande->id}})" class="text-red-600 hover:text-red-900">
                                             Rejeter
                                         </button>
+                                        @endif
                                         <a href="{{route('commandes.details', $commande->id)}}" class="text-blue-600 hover:text-blue-900">
                                             Détails
                                         </a>

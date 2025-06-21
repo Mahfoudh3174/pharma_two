@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('commande_id')->constrained()->cascadeOnDelete();
             $table->foreignId('medication_id')->constrained()->cascadeOnDelete();
-            $table->decimal("total_price");
+            $table->integer("total_price");
             $table->integer("quantity");
             $table->timestamps();
         });

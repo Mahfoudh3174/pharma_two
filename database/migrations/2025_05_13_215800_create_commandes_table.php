@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('pharmacy_id')->constrained()->cascadeOnDelete(); // ID de la pharmacie
             $table->enum("status",["ENCOURS","VALIDEE","REJETEE"])->default("ENCOURS"); // Statut
             $table->text("reject_reason")->nullable(); // Raison du rejet
-            $table->decimal('total_amount', 10, 2)->nullable(); // Prix total
+            $table->integer('total_amount')->nullable(); // Prix total
             $table->decimal('longitude', 10, 7)->nullable(); // Longitude
             $table->decimal('latitude', 10, 7)->nullable(); // Latitude
             $table->enum('type', ["LIVRAISON", "SURE PLACE"])->nullable();

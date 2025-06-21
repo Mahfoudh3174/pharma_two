@@ -18,11 +18,18 @@ class CommandeController extends Controller
         return view("facture.index",compact("commande"));
     }
     
-    public function validate(Commande $commande)
+    public function validate( Commande $commande)
     {
-        $commande->update(["status" => "validated"]);
+        $commande->update(["status" => "VALIDEE"]);
 
         return back()->with("success","commande validated.");
+    }
+    public function show(Commande $commande)
+    {
+        $commade= Commande::with(["medications","user","pharmacy"])
+            ->where("id", $commande->id)
+            ->first();
+        return view("order.show",compact("commande"));
     }
 
     public function reject(Request $request)

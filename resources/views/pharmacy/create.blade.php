@@ -51,6 +51,11 @@
                         </div>
                      
                     </div>
+                        <div>
+                            <!-- Hidden Latitude and Longitude -->
+                            <input type="hidden" id="latitude" name="latitude">
+                            <input type="hidden" id="longitude" name="longitude">
+                        </div>
 
                     <!-- Helper Text -->
                     <p class="text-xs text-gray-500">
@@ -74,4 +79,22 @@
             </div>
         </div>
     </div>
+    
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    document.getElementById("latitude").value = position.coords.latitude;
+                    document.getElementById("longitude").value = position.coords.longitude;
+                },
+                function (error) {
+                    console.warn("Location access denied or failed:", error.message);
+                }
+            );
+        } else {
+            console.warn("Geolocation is not supported by this browser.");
+        }
+    });
+</script>
 </x-layouts.app>

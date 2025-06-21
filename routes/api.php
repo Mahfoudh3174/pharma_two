@@ -13,7 +13,7 @@ use Illuminate\Validation\ValidationException;
 
 
 Route::post('/login', function (Request $request) {
-
+ Log::info('request: '. $request->token);
            $request->validate([
             'credential' => 'required|string',
             'password' => 'required|string',
@@ -68,6 +68,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/', [\App\Http\Controllers\api\CommandeController::class, 'store']);
         Route::get('/', [\App\Http\Controllers\api\CommandeController::class, 'index']);
         Route::get('/{id}', [\App\Http\Controllers\api\CommandeController::class, 'show']);
+        Route::delete('/{id}', [\App\Http\Controllers\api\CommandeController::class, 'delete']);
         Route::put('/{id}/validate', [\App\Http\Controllers\api\CommandeController::class, 'validate']);
         Route::put('/{id}/reject', [\App\Http\Controllers\api\CommandeController::class, 'reject']);
     });

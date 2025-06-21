@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Str;
 
 class Commande extends Model
 {
@@ -23,6 +24,14 @@ class Commande extends Model
 
         ;
     }
+    //referance function
+public static function generateReference()
+{
+    $letters = strtoupper(Str::random(3)); // Random 3 uppercase letters
+    $numbers = str_pad(random_int(0, 99999), 5, '0', STR_PAD_LEFT); // Random 5-digit number with leading 0s
+    return "REF-{$letters}{$numbers}";
+}
+
     public function pharmacy()
     {
         return $this->belongsTo(Pharmacy::class);

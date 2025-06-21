@@ -24,16 +24,14 @@ class AuthController
         $user = User::create([
             'name' => $validatedData['username'],
             'email' => $validatedData['email'],
-            'password' => $validatedData['password'],
+                'password' => Hash::make($validatedData['password']),
             'phone' => $validatedData['phone'],
         ]);
         Log::info('User created', ['user_id' => $user->id]);
 
-        $token = $user->createToken($validatedData['email'])->plainTextToken;
 
         return response()->json([
             'user' => $user,
-            'token' => $token,
         ], 200);
     }
 

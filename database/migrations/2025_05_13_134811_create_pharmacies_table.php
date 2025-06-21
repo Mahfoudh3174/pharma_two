@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('address');
             $table->string('city');
             $table->string('state');
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

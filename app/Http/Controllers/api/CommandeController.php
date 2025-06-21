@@ -27,41 +27,55 @@ public function store(Request $request)
         'cardItems.*.medication.id' => 'required|exists:medications,id',
         'cardItems.*.quantity' => 'required|integer|min:1',
         'cardItems.*.medication.price' => 'required|numeric|min:1',
-        "deliveryType"=>"required|in:SURE PLACE,LIVRAISON"
+        "deliveryType"=>"required|in:SURE PLACE,LIVRAISON",
+        'shipping_price' => 'required|numeric|min:1',
     ]);
 
     DB::beginTransaction();
 
     try {
+        if($validatedData['deliveryType']=="SURE PLACE"){
+            $validatedData['shipping_price']=0;
+        }
+        $reference = Commande::generateReference();
         // Create commande
         $commande = Commande::create([
             'user_id' => auth()->id(),
+            'reference' => $reference,
             'longitude' => $validatedData['longitude'] ?? null,
             'latitude' => $validatedData['latitude'] ?? null,
             'pharmacy_id' => $validatedData['pharmacy_id'],
             'total_amount' => $validatedData['totalPrice'],
+            'delivery_type' => $validatedData['deliveryType'],
+            'shipping_price' => $validatedData['shipping_price']
         ]);
 
         foreach ($validatedData['cardItems'] as $item) {
-            $medicationId = $item['medication']['id'];
-            $quantity = $item['quantity'];
-            $price = $item['medication']['price'];
+    $medicationId = $item['medication']['id'];
+    $quantity = (int) $item['quantity'];
+    $unitPrice = (int) $item['medication']['price'];
 
-            $commande->medications()->attach($medicationId, [
-                'quantity' => $quantity,
-                'total_price' => $quantity * $price,
-            ]);
+    
 
-            // Decrement from pharmacy stock
-            $medicationModel = $commande->pharmacy->medications()->find($medicationId);
-            if ($medicationModel && $medicationModel->quantity >= $quantity) {
-                $medicationModel->decrement('quantity', $quantity);
-                Log::info("Medication decremented: {$medicationModel->name} - Quantity: {$quantity}, Left: {$medicationModel->quantity}");
-            } else {
-                DB::rollBack();
-                return response()->json(['message' => "{$medicationModel->name} is out of stock"], 404);
-            }
-        }
+    $totalPrice = $quantity * $unitPrice ; 
+
+    // Attach to pivot table
+    $commande->medications()->attach($medicationId, [
+        'quantity' => $quantity,
+        'total_price' => $totalPrice,
+    ]);
+
+    // Decrement pharmacy stock
+    $medicationModel = $commande->pharmacy->medications()->find($medicationId);
+    if ($medicationModel && $medicationModel->quantity >= $quantity) {
+        $medicationModel->decrement('quantity', $quantity);
+        Log::info("Medication decremented: {$medicationModel->name} - Quantity: {$quantity}, Left: {$medicationModel->quantity}");
+    } else {
+        DB::rollBack();
+        return response()->json(['message' => "{$medicationModel->name} is out of stock"], 404);
+    }
+}
+
 
         // Delete from cards table for this user and pharmacy
         Card::where('user_id', auth()->id())
@@ -102,5 +116,16 @@ public function store(Request $request)
 
 
         return response()->json(['orders' => OrderResource::collection($commandes)], 200);
+    }
+
+    public function delete($id)
+    {
+        Log::info('delete id: '. $id);
+        $commande = Commande::find($id);
+        if (!$commande) {
+            return response()->json(['message' => 'Commande not found'], 404);
+        }
+        $commande->delete();
+        return response()->json(['message' => 'Commande deleted successfully'], 200);
     }
 }
