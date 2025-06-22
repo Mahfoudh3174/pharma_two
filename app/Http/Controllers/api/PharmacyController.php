@@ -45,16 +45,15 @@ class PharmacyController extends Controller
         });
     })
         ->orderBy('id', 'desc')
-         ->get();
+         ->paginate(9);
             // ->cursorPaginate(PAGINATE, ['*'], 'cursor', $request->cursor ? $request->cursor : null);
 
     return response()->json([
         'medications' => MedicationResource::collection($medications),
-        // 'meta' => [
-        //     'next_cursor' => $medications->nextCursor()?->encode(),
-        //     'per_page' => $medications->perPage(),
-        //     'has_more' => $medications->hasMorePages()
-        // ]
+        'meta' => [
+            'current_page' => $medications->currentPage(),
+            'last_page' => $medications->lastPage(),
+        ]
     ]);
 }
 }

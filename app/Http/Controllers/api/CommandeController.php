@@ -16,6 +16,7 @@ class CommandeController extends Controller
 
 public function store(Request $request)
 {
+    Log::info($request->all());
 
     $validatedData = $request->validate([
         'totalPrice' => 'required|numeric|min:1',
@@ -105,12 +106,18 @@ public function store(Request $request)
                 $query->where('status', $request->status);
             })
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(3)->withQueryString();
            // dd(OrderResource::collection($commandes));
 
 
 
-        return response()->json(['orders' => OrderResource::collection($commandes)], 200);
+        return response()->json([
+            'orders' => OrderResource::collection($commandes),
+            'meta' => [
+                'current_page' => $commandes->currentPage(),
+                'last_page' => $commandes->lastPage(),
+            ]
+        ], 200);
     }
 
     public function delete($id)
