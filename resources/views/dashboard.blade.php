@@ -258,6 +258,9 @@
                                             bg-gray-100 text-gray-800
                                         @endif
                                         flex items-center gap-1 w-max">
+                                        @if($med->category && $med->category->svg_logo)
+                                            <img src="{{ $med->category->svg_logo_url }}" alt="{{ $med->category->name }}" class="w-4 h-4">
+                                        @endif
                                         {{ $med->category ? $med->category->name : 'Non spécifié' }}
                                     </span>
                                 </td>

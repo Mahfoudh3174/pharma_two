@@ -100,7 +100,7 @@ public function store(Request $request)
             return response()->json(['message' => 'Unauthorized'], 401);
         }
         $commandes=$user->commandes()
-            ->with(['pharmacy.categories', 'medications'])
+            ->with(['pharmacy', 'medications'])
             ->when($request->has('status'), function ($query) use ($request) {
                 $query->where('status', $request->status);
             })

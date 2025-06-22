@@ -59,7 +59,7 @@ class DashboardController extends Controller
             'medications' => $medications,
             'allMedications' => $allMedications,
             'commandes' => $commandes,
-            'categories' => Category::select('id', 'name')->get(),
+            'categories' => Category::active()->select('id', 'name', 'svg_logo')->get(),
             'medicationSortDirection' => $request->medication_direction === 'desc' ? 'desc' : 'asc',
             'medicationCurrentSort' => $request->medication_sort,
             'orderSortDirection' => $request->order_direction === 'desc' ? 'desc' : 'asc',

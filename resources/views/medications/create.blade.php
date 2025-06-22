@@ -27,15 +27,22 @@
                     
                     <div>
                         <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Catégorie *</label>
-                        <select id="category" name="category" required
-                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 @error('category') border-red-500 @enderror">
-                            <option value="">Sélectionner une catégorie</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}" {{ old('category') == $category->id ? 'selected' : '' }}>
-                                    {{ $category->name }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <div class="relative">
+                            <select id="category" name="category" required
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 @error('category') border-red-500 @enderror appearance-none">
+                                <option value="">Sélectionner une catégorie</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}" {{ old('category') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
                         @error('category')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror

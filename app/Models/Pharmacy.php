@@ -22,10 +22,6 @@ class Pharmacy extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function categories()
-    {
-        return $this->hasMany(Category::class);
-    }
     public function commandes()
     {
         return $this->hasMany(Commande::class);

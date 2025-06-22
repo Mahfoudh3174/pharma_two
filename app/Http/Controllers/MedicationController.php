@@ -14,10 +14,7 @@ class MedicationController extends Controller
 {
     public function create()
     {
-        $categories = Category::whereRelation('pharmacy', 'user_id', Auth::id())->get();
-        if ($categories->isEmpty()) {
-            return redirect()->back()->with('error', 'You must create a category before adding medications');
-        } 
+        $categories = Category::active()->get();
         return view('medications.create', compact('categories'));
     }
 
@@ -99,10 +96,7 @@ public function store(Request $request)
 
     public function edit(Medication $medication)
     {
-       
-        $categories = Category::all();
-        
-        
+        $categories = Category::active()->get();
         return view('medications.edit', compact('medication', 'categories'));
     }
 

@@ -28,27 +28,25 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('0'),
         ]);
 
-        // Create categories
-
-
         // Create pharmacies with owners
         $pharmacies = Pharmacy::factory(1)->create([
             'user_id' => function() use ($admin) {
                 return $admin->id; // Assign the admin user as the owner of the pharmacy
             },
         ]);
-         $categories = Category::factory(10)->create([
-            'pharmacy_id' => fn() => $pharmacies->first()->id, // Assign categories to the first pharmacy
+
+        // Seed categories first
+        $this->call([
+            CategorySeeder::class,
         ]);
 
-
         // Create medications
+        $categories = Category::all();
         $medications = Medication::factory(50)->create([
             'category_id' => fn() => $categories->random()->id,
             'image' => fn() => "medications/oc0VdjEV9UxqIdBDwN2e9Y87xLkr9vUdwsTZXL0z.png",
             'pharmacy_id' => fn() => $pharmacies->first()->id, // Assign medications to the first pharmacy
         ]);
-
 
         // Create orders
         $commandes = Commande::factory(20)->create([
@@ -60,8 +58,6 @@ class DatabaseSeeder extends Seeder
                     ? $faker->sentence()
                     : null,
             'total_amount' => $faker->randomFloat(2, 50, 1000)
-
-
         ]);
 
         // Attach medications to orders - CORRECTED VERSION

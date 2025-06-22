@@ -20,7 +20,6 @@ class PharmacyResource extends JsonResource
             'address' => $this->address,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
-            'categories' => CategoryResource::collection($this->whenLoaded('categories')),
             'medications' => MedicationResource::collection($this->whenLoaded('medications')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

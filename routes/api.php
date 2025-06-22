@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\api\CardController;
+use App\Http\Controllers\api\CategoryController;
 use App\Models\Fcm;
 use App\Models\Pharmacy;
 use App\Models\User;
@@ -63,6 +64,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return response()->json($request->user());
     });
 
+    // Categories routes
+    Route::prefix('categories')->group(function () {
+        Route::get('/', [CategoryController::class, 'index']);
+        Route::get('/{category}', [CategoryController::class, 'show']);
+        Route::get('/pharmacy/{pharmacyId}', [CategoryController::class, 'pharmacyCategories']);
+    });
+
     Route::prefix('pharmacies')->group(function () {
         Route::get('/', [\App\Http\Controllers\api\PharmacyController::class, 'index']);
         Route::get('/{id}', [\App\Http\Controllers\api\PharmacyController::class, 'show']);
@@ -82,6 +90,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', [CardController::class, 'index']);
         Route::delete('/{id}', [CardController::class,'delete']);
         Route::get('/cart-count/{id}', [CardController::class,'show']);
+    });
+    // categories
+    Route::prefix('categories')->group(function () {
+        Route::get('/', [CategoryController::class, 'index']);
     });
 
     Route::post('/logout', [AuthController::class, 'logout']);

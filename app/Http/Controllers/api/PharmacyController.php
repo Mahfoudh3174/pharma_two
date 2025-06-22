@@ -4,8 +4,10 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MedicationResource;
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\PharmacyResource;
 use App\Models\Pharmacy;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Log;
 
@@ -14,14 +16,17 @@ class PharmacyController extends Controller
     public function index(Request $request)
     {
         // Fetch all pharmacies
-        $pharmacies = Pharmacy::with(['categories', 'medications.category'])
+        $pharmacies = Pharmacy::with(['medications.category'])
         ->when($request->search, function ($query) use ($request) {
             $query->where('name', 'like', '%' . $request->search . '%');
         })->
 
         get();
 
-        return response()->json(['pharmacies'=>PharmacyResource::collection($pharmacies)], 200);
+        return response()->json([
+            'pharmacies'=>PharmacyResource::collection($pharmacies),
+            "categories"=>CategoryResource::collection(Category::get())
+        ], 200);
     }
   public function show(Request $request,$id)
 {
