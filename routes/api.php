@@ -59,6 +59,11 @@ Route::post('/login', function (Request $request) {
 });
 Route::post('/register', [AuthController::class, 'register']);
 
+// Password reset routes (no authentication required)
+Route::post('/password/send-otp', [AuthController::class, 'sendPasswordResetOtp']);
+Route::post('/password/verify-otp', [AuthController::class, 'verifyOtp']);
+Route::post('/password/reset', [AuthController::class, 'resetPassword']);
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         return response()->json($request->user());
