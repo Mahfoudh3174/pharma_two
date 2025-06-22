@@ -97,7 +97,6 @@ public function index(Request $request) {
             ]);
         }
         $card->delete();
-        Log::info('User created', ['user_id' => $user->cards()->where('medication_id', $id)->count()]);
         return response()->json([
             'message'=>'success',
             "count"=>$user->cards()->where('medication_id', $id)->count()

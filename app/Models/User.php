@@ -49,6 +49,11 @@ class User extends Authenticatable
         return $this->hasMany(Card::class);
     }
 
+    public function fcm()
+    {
+        return $this->hasOne(Fcm::class);
+    }
+
 
     public function pharmacy()
     {

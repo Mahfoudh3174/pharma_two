@@ -28,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
         \Carbon\Carbon::serializeUsing(function ($carbon) {
             return $carbon->format('Y-m-d H:i:s');
         });
+        \App\Models\Commande::observe(new \App\Observers\CommandeObserver());
     }
 }

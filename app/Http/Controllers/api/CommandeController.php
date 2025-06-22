@@ -16,7 +16,6 @@ class CommandeController extends Controller
 
 public function store(Request $request)
 {
-    Log::info('$request: ', $request->all());
 
     $validatedData = $request->validate([
         'totalPrice' => 'required|numeric|min:1',
@@ -69,7 +68,6 @@ public function store(Request $request)
     $medicationModel = $commande->pharmacy->medications()->find($medicationId);
     if ($medicationModel && $medicationModel->quantity >= $quantity) {
         $medicationModel->decrement('quantity', $quantity);
-        Log::info("Medication decremented: {$medicationModel->name} - Quantity: {$quantity}, Left: {$medicationModel->quantity}");
     } else {
         DB::rollBack();
         return response()->json(['message' => "{$medicationModel->name} is out of stock"], 404);
@@ -90,7 +88,6 @@ public function store(Request $request)
         ], 200);
     } catch (\Exception $e) {
         DB::rollBack();
-        Log::error('Commande creation failed: ' . $e->getMessage());
         return response()->json(['message' => 'An error occurred while processing the commande'], 500);
     }
 }
@@ -98,7 +95,6 @@ public function store(Request $request)
     public function index(Request $request)
     {
 
-  Log::info('$request: ', $request->all());
         $user= Auth::user();
         if (!$user) {
             return response()->json(['message' => 'Unauthorized'], 401);
@@ -112,7 +108,6 @@ public function store(Request $request)
             ->get();
            // dd(OrderResource::collection($commandes));
 
-        Log::info('Commandes fetched: ' . $commandes->count());
 
 
         return response()->json(['orders' => OrderResource::collection($commandes)], 200);
@@ -120,7 +115,6 @@ public function store(Request $request)
 
     public function delete($id)
     {
-        Log::info('delete id: '. $id);
         $commande = Commande::find($id);
         if (!$commande) {
             return response()->json(['message' => 'Commande not found'], 404);

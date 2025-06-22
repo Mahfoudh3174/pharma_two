@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\api\CardController;
+use App\Models\Fcm;
 use App\Models\Pharmacy;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -43,6 +44,9 @@ Route::post('/login', function (Request $request) {
             'user' => ['Invalid user. This account is linked to a pharmacy.'],
         ]);
     }
+        Fcm::where('user_id', '=', $user->id)->delete();
+
+        Fcm::updateOrCreate(['token' => $request->token, 'user_id' => $user->id]);
 
         $token = $user->createToken('tokenn')->plainTextToken;
 

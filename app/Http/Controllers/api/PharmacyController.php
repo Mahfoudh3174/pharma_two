@@ -41,7 +41,6 @@ class PharmacyController extends Controller
     })
         ->orderBy('id', 'desc')
          ->get();
-         Log::info('$medications: '. $medications->count());
             // ->cursorPaginate(PAGINATE, ['*'], 'cursor', $request->cursor ? $request->cursor : null);
 
     return response()->json([
