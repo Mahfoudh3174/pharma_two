@@ -21,6 +21,7 @@ class CommandeFactory extends Factory
         return [
              'user_id' => User::factory(),
             'pharmacy_id' => Pharmacy::factory(),
+            "reference" => $this->faker->unique()->numerify('ORD-####'),
             'status' => $this->faker->randomElement(['inProgress', 'validated', 'rejected']),
             'reject_reason' => $this->faker->optional(0.3)->sentence(),
             'longitude' => $this->faker->optional(0.5)->latitude(),

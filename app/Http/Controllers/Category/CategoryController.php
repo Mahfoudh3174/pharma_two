@@ -10,8 +10,8 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        // Fetch all active categories (system-wide, not user-specific)
-        $categories = Category::active()->paginate(15);
+        // Fetch all active categories (system-wide, not user-specific) with medications count
+        $categories = Category::active()->withCount('medications')->paginate(15);
 
         return view('categories.index', compact('categories'));
     }

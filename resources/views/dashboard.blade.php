@@ -139,7 +139,13 @@
                         </select>
                     </div>
                     
-
+                    <div class="sm:col-span-2">
+                        <select name="medication_stock" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            <option value="">Tous les stocks</option>
+                            <option value="low" {{ request('medication_stock') == 'low' ? 'selected' : '' }}>Stock Faible (&lt;10)</option>
+                            <option value="out" {{ request('medication_stock') == 'out' ? 'selected' : '' }}>En Rupture</option>
+                        </select>
+                    </div>
                     
                     <div class="sm:col-span-2 flex gap-2">
                         <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-1">
@@ -150,7 +156,7 @@
                         </button>
                         <a href="{{ route('dashboard', $pharmacy) }}?{{ http_build_query(array_merge(
                             request()->only(['order_search', 'order_status', 'order_date', 'order_sort', 'order_direction']),
-                            ['medication_search' => '', 'medication_category' => '']
+                            ['medication_search' => '', 'medication_category' => '', 'medication_stock' => '']
                         )) }}#medications-section" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg transition-colors flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -341,6 +347,7 @@
                         {{ $medications->appends([
                             'medication_search' => request('medication_search'),
                             'medication_category' => request('medication_category'),
+                            'medication_stock' => request('medication_stock'),
                             'medication_sort' => request('medication_sort'),
                             'medication_direction' => request('medication_direction'),
                             'order_search' => request('order_search'),
@@ -396,7 +403,7 @@
                         <div class="sm:col-span-3">
                             <select name="order_status" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">Tous les statuts</option>
-                                <option value="EN_ATTENTE" {{ request('order_status') == 'EN_ATTENTE' ? 'selected' : '' }}>En Attente</option>
+                                <option value="ENCOURS" {{ request('order_status') == 'ENCOURS' ? 'selected' : '' }}>En Cours</option>
                                 <option value="VALIDEE" {{ request('order_status') == 'VALIDEE' ? 'selected' : '' }}>Validée</option>
                                 <option value="REJETEE" {{ request('order_status') == 'REJETEE' ? 'selected' : '' }}>Rejetée</option>
                             </select>
@@ -444,21 +451,13 @@
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortCommandesTable(1)">
                                     <div class="flex items-center">
-                                        Client
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                        </svg>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortCommandesTable(2, true)">
-                                    <div class="flex items-center">
                                         Date
                                         <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                         </svg>
                                     </div>
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortCommandesTable(3, true)">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortCommandesTable(2, true)">
                                     <div class="flex items-center">
                                         Montant
                                         <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -481,9 +480,6 @@
                                     {{ $commande->reference }}
                                 </td>
                                 
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $commande->user->name }}
-                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $commande->created_at->format('d/m/Y H:i') }}
                                 </td>
@@ -696,6 +692,7 @@
             // Preserve other parameters
             if (params.get('medication_search')) params.set('medication_search', params.get('medication_search'));
             if (params.get('medication_category')) params.set('medication_category', params.get('medication_category'));
+            if (params.get('medication_stock')) params.set('medication_stock', params.get('medication_stock'));
             if (params.get('order_search')) params.set('order_search', params.get('order_search'));
             if (params.get('order_status')) params.set('order_status', params.get('order_status'));
             if (params.get('order_date')) params.set('order_date', params.get('order_date'));
@@ -732,7 +729,8 @@
             const params = url.searchParams;
             
             // Set order sort parameters
-            const sortColumns = ['reference', 'user', 'created_at', 'total_price'];
+            const sortColumns = ['reference', 'created_at', 'total_amount'];
+            if (columnIndex > 2) return; // Only allow sorting by these 3 columns
             params.set('order_sort', sortColumns[columnIndex]);
             params.set('order_direction', isAscending ? 'asc' : 'desc');
             
@@ -828,11 +826,15 @@
             // Restore medication form
             const medicationSearch = urlParams.get('medication_search');
             const medicationCategory = urlParams.get('medication_category');
+            const medicationStock = urlParams.get('medication_stock');
             if (medicationSearch) {
                 document.querySelector('input[name="medication_search"]').value = medicationSearch;
             }
             if (medicationCategory) {
                 document.querySelector('select[name="medication_category"]').value = medicationCategory;
+            }
+            if (medicationStock) {
+                document.querySelector('select[name="medication_stock"]').value = medicationStock;
             }
             
             // Restore commandes form

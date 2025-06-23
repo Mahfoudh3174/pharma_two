@@ -24,6 +24,7 @@ class DashboardController extends Controller
             'medication_category' => 'nullable|string',
             'medication_sort' => 'nullable|string',
             'medication_direction' => 'nullable|string|in:asc,desc',
+            'medication_stock' => 'nullable|string|in:low,out',
         ]);
         $user = Auth::user();
 
@@ -55,6 +56,13 @@ class DashboardController extends Controller
         // Get medications if pharmacy exists with separate parameters
         $medications = $pharmacy ? $pharmacy->medications()
             ->with(['category'])
+            ->when($request->filled('medication_stock'), function ($query) use ($request) {
+                if ($request->medication_stock === 'low') {
+                    $query->whereBetween('quantity', [1, 9]);
+                } elseif ($request->medication_stock === 'out') {
+                    $query->where('quantity', 0);
+                }
+            })
             ->when($request->filled('medication_search'), function ($query) use ($request) {
                 $query->where('name', 'like', '%' . $request->medication_search . '%');
             })
