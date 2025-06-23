@@ -17,6 +17,7 @@ class CategoryResource extends JsonResource
         return [
             "id" => $this->id,
             "name" => $this->name,
+            "ar_name" => $this->ar_name,
             "svg_logo" => $this->svg_logo,
             "medications_count" => $this->whenCounted('medications'),
             "medications" => MedicationResource::collection($this->whenLoaded('medications')),

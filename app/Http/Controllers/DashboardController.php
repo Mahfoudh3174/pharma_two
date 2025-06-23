@@ -13,6 +13,18 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+
+        $request->validate([
+            'order_search' => 'nullable|string',
+            'order_status' => 'nullable|string',
+            'order_date' => 'nullable|date',
+            'order_sort' => 'nullable|string',
+            'order_direction' => 'nullable|string|in:asc,desc',
+            'medication_search' => 'nullable|string',
+            'medication_category' => 'nullable|string',
+            'medication_sort' => 'nullable|string',
+            'medication_direction' => 'nullable|string|in:asc,desc',
+        ]);
         $user = Auth::user();
 
         // Load pharmacy with counts and additional data

@@ -682,9 +682,15 @@
             const url = new URL(window.location);
             const params = url.searchParams;
             
-            // Set medication sort parameters
-            const sortColumns = ['name', 'category', 'quantity', 'price'];
-            params.set('medication_sort', sortColumns[columnIndex]);
+            // Correct mapping: index in table => DB column
+            // 0: Image (not sortable), 1: name, 2: category (not sortable), 3: quantity, 4: price
+            let sortColumn = null;
+            if (columnIndex === 1) sortColumn = 'name';
+            else if (columnIndex === 3) sortColumn = 'quantity';
+            else if (columnIndex === 4) sortColumn = 'price';
+            else return; // Do nothing for non-sortable columns
+            
+            params.set('medication_sort', sortColumn);
             params.set('medication_direction', isAscending ? 'asc' : 'desc');
             
             // Preserve other parameters
