@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
         // Create admin user
         $admin=User::create([
             'name' => 'Admin User',
-            'email' => 'admin@example.com',
+            'email' => 'admin@gmail.com',
+            "email_verified_at" => now(),
             'password' => Hash::make('0'),
         ]);
 
@@ -44,7 +45,7 @@ class DatabaseSeeder extends Seeder
         $categories = Category::all();
         $medications = Medication::factory(50)->create([
             'category_id' => fn() => $categories->random()->id,
-            'image' => fn() => "medications/oc0VdjEV9UxqIdBDwN2e9Y87xLkr9vUdwsTZXL0z.png",
+            'image' => fn() => "medications/E9RyOKMH6jPvFcftk601ho2dkuzihjPd4pGNY2bo.jpg",
             'pharmacy_id' => fn() => $pharmacies->first()->id, // Assign medications to the first pharmacy
         ]);
 

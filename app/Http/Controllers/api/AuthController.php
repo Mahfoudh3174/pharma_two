@@ -25,6 +25,7 @@ class AuthController
         $user = User::create([
             'name' => $validatedData['username'],
             'email' => $validatedData['email'],
+            'email_verified_at' => now(),
                 'password' => Hash::make($validatedData['password']),
             'phone' => $validatedData['phone'],
         ]);
