@@ -71,7 +71,7 @@ public function store(Request $request)
         $medicationModel->decrement('quantity', $quantity);
     } else {
         DB::rollBack();
-        return response()->json(['message' => "{$medicationModel->name} is out of stock"], 404);
+        return response()->json(['error' => $medicationModel->name]);
     }
 }
 
@@ -82,7 +82,6 @@ public function store(Request $request)
             ->delete();
 
         DB::commit();
-
         return response()->json([
             'message' => 'Commande created successfully',
             'commande' => $commande
