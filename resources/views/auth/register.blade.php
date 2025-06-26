@@ -1,7 +1,7 @@
 <x-guest-layout>
         <!-- Form Header -->
         <div class="text-center mb-8">
-            <h2 class="text-2xl font-bold text-blue-600">Créer un compte Pharmacie+</h2>
+            <h2 class="text-2xl font-bold text-blue-600">Créer un compte Saydeliytek </h2>
             <p class="text-gray-600 mt-2">Rejoignez notre plateforme de gestion pharmaceutique</p>
         </div>
 
@@ -72,7 +72,7 @@
                     <input id="terms" name="terms" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" required>
                 </div>
                 <div class="ml-3 text-sm">
-                    <label for="terms" class="font-medium text-gray-700">J'accepte les <a href="#" class="text-blue-600 hover:text-blue-500">conditions d'utilisation</a> et la <a href="#" class="text-blue-600 hover:text-blue-500">politique de confidentialité</a></label>
+                    <label for="terms" class="font-medium text-gray-700">J'accepte les conditions d'utilisation et la politique de confidentialité </label>
                 </div>
             </div>
 

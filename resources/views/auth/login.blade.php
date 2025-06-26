@@ -1,7 +1,7 @@
 <x-guest-layout>
         <!-- Form Header -->
         <div class="text-center mb-8">
-            <h2 class="text-2xl font-bold text-blue-600">Connexion à Pharmacie+</h2>
+            <h2 class="text-2xl font-bold text-blue-600">Connexion à Saydeliytek</h2>
             <p class="text-gray-600 mt-2">Accédez à votre espace professionnel</p>
         </div>
 

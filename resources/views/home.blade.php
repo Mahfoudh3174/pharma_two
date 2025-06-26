@@ -16,7 +16,7 @@
                         <span class="block text-blue-200">gestion pharmaceutique</span>
                     </h1>
                     <p class="mt-6 text-xl text-blue-100 leading-relaxed">
-                        Pharmacie+ Pro automatise vos processus et simplifie la gestion quotidienne de votre officine.
+                        Saydeliytek automatise vos processus et simplifie la gestion quotidienne de votre officine.
                     </p>
                     <div class="mt-10 flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
                         <a href="{{ route('login') }}" class="flex items-center px-4 py-2 rounded bg-white text-blue-500 font-bold">
@@ -38,13 +38,19 @@
                             <svg class="h-5 w-5 text-blue-300 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                             </svg>
-                            Certifié ANSM
+                            Certifié MTNIMA
                         </div>
                         <div class="flex items-center text-sm text-blue-100">
                             <svg class="h-5 w-5 text-blue-300 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                             </svg>
-                            RGPD Compliant
+                            Rapide
+                        </div>
+                        <div class="flex items-center text-sm text-blue-100">
+                            <svg class="h-5 w-5 text-blue-300 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            sécurisé
                         </div>
                     </div>
                 </div>
@@ -117,11 +123,7 @@
                                     @endforeach
                                 </ul>
                             </div>
-                            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
-                                <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-500">
-                                    En savoir plus <span aria-hidden="true">→</span>
-                                </a>
-                            </div>
+                    
                         </div>
                     @endforeach
                 </div>
@@ -134,7 +136,7 @@
                 <div class="bg-gradient-to-r from-blue-600 to-teal-600 rounded-2xl shadow-xl overflow-hidden">
                     <div class="px-6 py-12 sm:p-16">
                         <div class="max-w-3xl mx-auto text-center">
-                            <h2 class="text-3xl font-extrabold text-white">Pharmacie+ en chiffres</h2>
+                            <h2 class="text-3xl font-extrabold text-white">Saydeliytek en chiffres</h2>
                             <p class="mt-4 text-lg text-blue-100">
                                 La solution préférée des professionnels de santé
                             </p>
