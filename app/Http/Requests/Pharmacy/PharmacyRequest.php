@@ -24,6 +24,8 @@ class PharmacyRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', 'unique:pharmacies'],
             'address' => ['required', 'string'],
+            'latitude'=>['required'],
+            'longitude'=>['required'],
             'city' => ['required', 'string'],
             'state' => ['required', 'string'],
         ];

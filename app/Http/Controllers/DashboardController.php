@@ -77,6 +77,9 @@ class DashboardController extends Controller
             'pharmacy' => $pharmacy,
             'totalValue' => $pharmacy ? $pharmacy->medications()->selectRaw('sum(price * quantity) as total_value')->first()->total_value : 0,
             'medications' => $medications,
+              'profit' => ($pharmacy && $pharmacy->commandes())
+    ? $pharmacy->commandes()->where('status', 'VALIDEE')->sum('total_amount')
+    : 0,
             'allMedications' => $allMedications,
             'commandes' => $commandes,
             'categories' => Category::active()->select('id', 'name', 'svg_logo')->get(),
