@@ -29,7 +29,14 @@ public function store(Request $request)
         'cardItems.*.medication.price' => 'required|numeric|min:1',
         "deliveryType"=>"required|in:SURE PLACE,LIVRAISON",
         'shipping_price' => 'required|numeric|min:1',
+        "lang"=> 'required|in:ar,fr',
     ]);
+    $user = Auth::user();
+    if (!$user) {
+        return response()->json(['message' => 'Unauthorized'], 401);
+    }
+    $user->lang = $validatedData['lang'];
+    $user->save();
 
     DB::beginTransaction();
 

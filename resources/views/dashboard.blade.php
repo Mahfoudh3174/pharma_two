@@ -504,38 +504,52 @@
                                     {{ $commande->medications->sum('pivot.total_price') }} UM
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    @if($commande->status == 'VALIDEE')
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                            {{ $commande->status }}
-                                        </span>
-                                    @elseif($commande->status == 'REJETEE')
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                                            {{ $commande->status }}
-                                        </span>
-                                    @else
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                            {{ $commande->status }}
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <div class="flex justify-end space-x-2">
-                                        @if ($commande->status != "VALIDEE" && $commande->status != "REJETEE")
-                                            <a href="{{ route("commandes.validate", $commande->id) }}" class="text-green-600 hover:text-green-900">
-                                                Valider
-                                            </a> 
-                                        @endif
-                                       
-                                        @if ($commande->status != "REJETEE" && $commande->status != "VALIDEE")
-                                            <button onclick="showRejectModal({{ $commande->id }})" class="text-red-600 hover:text-red-900">
-                                                Rejeter
-                                            </button>
-                                        @endif
-                                        <a href="{{ route('commandes.details', $commande->id) }}" class="text-blue-600 hover:text-blue-900">
-                                            Détails
-                                        </a>
-                                    </div>
-                                </td>
+    @php
+        $status = $commande->status;
+        $statusColors = [
+            'VALIDÉE' => 'bg-green-100 text-green-800',
+            'REJETÉE' => 'bg-red-100 text-red-800',
+            'LIVRÉ'   => 'bg-blue-100 text-blue-800',
+            'default' => 'bg-yellow-100 text-yellow-800'
+        ];
+        $classes = $statusColors[$status] ?? $statusColors['default'];
+    @endphp
+
+    <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $classes }}">
+        {{ $status }}
+    </span>
+</td>
+
+                               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+    <div class="flex justify-end space-x-2">
+        @php
+            $status = $commande->status;
+        @endphp
+
+        @if (!in_array($status, ['VALIDÉE', 'REJETEE', 'LIVRÉ']))
+            <a href="{{ route('commandes.validate', $commande->id) }}" class="text-green-600 hover:text-green-900">
+                Valider
+            </a>
+        @endif
+
+        @if ($status === 'VALIDÉE')
+            <a href="{{ route('commandes.delivered', $commande->id) }}" class="text-blue-600 hover:text-blue-900">
+                Livrer
+            </a>
+        @endif
+
+        @if (!in_array($status, ['REJETEE', 'VALIDÉE', 'LIVRÉ']))
+            <button onclick="showRejectModal({{ $commande->id }})" class="text-red-600 hover:text-red-900">
+                Rejeter
+            </button>
+        @endif
+
+        <a href="{{ route('commandes.details', $commande->id) }}" class="text-blue-600 hover:text-blue-900">
+            Détails
+        </a>
+    </div>
+</td>
+
                             </tr>
                             @empty
                             <tr>

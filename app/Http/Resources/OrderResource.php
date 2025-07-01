@@ -18,6 +18,7 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'status' => $this->status,
+            'ar_status' => $this->ar_status ?? 'تم التسليم',
             'reference' => $this->reference,
             'reject_reason' => $this->reject_reason ?? null,
             'shipping_price' => $this->shipping_price??0,

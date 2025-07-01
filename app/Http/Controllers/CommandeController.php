@@ -20,7 +20,7 @@ class CommandeController extends Controller
     
     public function validate( Commande $commande)
     {
-        $commande->update(["status" => "VALIDEE"]);
+        $commande->update(["status" => "VALIDÉE", "ar_status" => "تم قبوله"]);
 
         return back()->with("success","commande validated.");
     }
@@ -37,8 +37,14 @@ class CommandeController extends Controller
         $commande = Commande::findOrFail($request->order_id);
 
 
-        $commande->update(["status" => "rejetee", "reject_reason" => $request->reject_reason]);
+        $commande->update(["status" => "REJETEE","ar_status"=>"تم الرفض", "reject_reason" => $request->reject_reason]);
 
         return back()->with("success","commande rejected.");
+    }
+    public function delivered(Commande $commande)
+    {
+        $commande->update(["status" => "LIVRÉ", "ar_status" => "تم التسليم"]);
+
+        return back()->with("success","commande delivered.");
     }
 }

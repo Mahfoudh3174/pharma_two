@@ -36,7 +36,8 @@ class SendStatusNotification implements ShouldQueue
      */
     public function handle(): void
     {
-        $statusMessage = "Votre commande est " . $this->commande->status;
+        $statusMessage = "Votre demande a été répondue par " . $this->commande->status;
+        $arStatusMessage = "تم الرد على طلبك ب " . $this->commande->ar_status;
 
         // 1. Verify Firebase credentials
         $credentialsPath = storage_path('app/firebase/pharmacy-74ca4-firebase-adminsdk-fbsvc-6e9f7c7ec1.json');
@@ -51,6 +52,7 @@ class SendStatusNotification implements ShouldQueue
 
         // 3. Get user and FCM token
         $user = User::find($this->commande->user_id);
+        $lang= $user->lang ?? 'fr';
         if (!$user) {
             Log::error("User not found for commande: " . $this->commande->id);
             return;
@@ -72,10 +74,17 @@ class SendStatusNotification implements ShouldQueue
         // 5. Build message step by step
         try {
             // Create notification
-            $notification = Notification::fromArray([
+            if( $lang === 'ar') {
+                $notification = Notification::fromArray([
+                    'title' => "حالة الطلب",
+                    'body' => $arStatusMessage,
+                ]);
+            } else {
+                $notification = Notification::fromArray([
                 'title' => "Statut de commande",
                 'body' => $statusMessage,
             ]);
+            }
 
             // Create base message
             $message = CloudMessage::new();

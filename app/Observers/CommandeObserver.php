@@ -36,16 +36,32 @@ class CommandeObserver
 
 
         $messaging = $factory->createMessaging();
+        $lang= $user->lang ?? 'fr';
+        if ($lang == 'ar') {
+            $statusMessage = "تم  تحديث حالة طلبك  " ;
+        } else {
+            $statusMessage = "Le statut de votre commande a été mis à jour" ;
+        }
 
         $token = Fcm::where('user_id', $user->id)->value('token');
 
-                    $messages = [
+                  if($lang == 'ar'){
+                      $messages = [
+                'token' => $token,
+                'notification' => [
+                    'title' => $commande->ar_status,
+                    'body' => $commande->reject_reason != null ? $commande->reject_reason : $statusMessage,
+                ],
+            ];
+                  }else{
+                      $messages = [
                 'token' => $token,
                 'notification' => [
                     'title' => $commande->status,
-                    'body' => $commande->reject_reason != null ? $commande->reject_reason : "Votre commande a été  " . $commande->status,
+                    'body' => $commande->reject_reason != null ? $commande->reject_reason : $statusMessage,
                 ],
             ];
+                  }
             $messaging->send($messages);
     }
 
