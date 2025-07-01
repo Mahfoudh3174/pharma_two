@@ -43,7 +43,7 @@ class CommandeObserver
                 'token' => $token,
                 'notification' => [
                     'title' => $commande->status,
-                    'body' => $commande->reject_reason != null ? $commande->reject_reason : "Nous avons des mises à jour concernant votre commande",
+                    'body' => $commande->reject_reason != null ? $commande->reject_reason : "Votre commande a été  " . $commande->status,
                 ],
             ];
             $messaging->send($messages);

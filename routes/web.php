@@ -7,6 +7,7 @@ use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\PharmacyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MedicationController;
+use App\Http\Controllers\PdfController;
 
 define('PAGINATE', 10);
 
@@ -51,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::resource('medications', MedicationController::class);
     });
+    Route::get('/facture/{id}', [PdfController::class, 'generatePdf'])->name('facture.generate');
 
     Route::get("commandes/details/{commande}",[CommandeController::class, "details"])->name("commandes.details");
     Route::get("commandes/validate/{commande}",[CommandeController::class, "validate"])->name("commandes.validate");

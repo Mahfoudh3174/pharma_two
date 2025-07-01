@@ -21,6 +21,11 @@
                         </span>
                     </p>
                 </div>
+                 <!-- Bouton PDF -->
+        <a href="{{ route('facture.generate', $commande->id) }}"
+           class="inline-block mt-2 bg-white text-blue-600 border border-white hover:bg-blue-100 font-semibold py-1 px-3 rounded text-sm">
+            Télécharger PDF
+        </a>
             </div>
         </div>
 
