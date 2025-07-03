@@ -35,8 +35,11 @@ Route::post('/login', function (Request $request) {
                 'credential' => ['The provided credentials are incorrect.'],
             ]);
         }
+        
 
         $user = $request->user();
+
+
 
         $hasPharmacy = Pharmacy::where('user_id', $user->id)->exists();
 
@@ -50,6 +53,14 @@ Route::post('/login', function (Request $request) {
         Fcm::updateOrCreate(['token' => $request->token, 'user_id' => $user->id]);
 
         $token = $user->createToken('tokenn')->plainTextToken;
+                if (!$user->email_verified_at) {
+            return response()->json([
+                'fr_message' => 'Veuillez vérifier votre email pour activer votre compte.',
+                'ar_message'=>'يرجى التحقق من بريدك الإلكتروني لتفعيل حسابك.',
+                'email' => $user->email,
+            'token' => $token,
+            ]);
+        }
 
         return response()->json([
             'user' => $user,
@@ -63,6 +74,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/password/send-otp', [AuthController::class, 'sendPasswordResetOtp']);
 Route::post('/password/verify-otp', [AuthController::class, 'verifyOtp']);
 Route::post('/password/reset', [AuthController::class, 'resetPassword']);
+//verify email
+Route::post('/email/send-otp', [AuthController::class, 'sendVerifyEmailOtp']);
+Route::post('/email/verify-otp', [AuthController::class, 'verifyEmailOtp']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {

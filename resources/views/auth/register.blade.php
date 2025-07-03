@@ -66,15 +66,7 @@
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2 text-sm text-red-600" />
             </div>
 
-            <!-- Terms and Conditions -->
-            <div class="flex items-start">
-                <div class="flex items-center h-5">
-                    <input id="terms" name="terms" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" required>
-                </div>
-                <div class="ml-3 text-sm">
-                    <label for="terms" class="font-medium text-gray-700">J'accepte les conditions d'utilisation et la politique de confidentialité </label>
-                </div>
-            </div>
+            
 
             <!-- Submit Button -->
             <div>

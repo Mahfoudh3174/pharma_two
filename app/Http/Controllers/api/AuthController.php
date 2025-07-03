@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\api;
 
 use App\Mail\PasswordResetOtpMail;
+use App\Mail\VerifyEmail;
 use App\Models\PasswordResetOtp;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
+use App\Models\VerifyEmailOtp;
 use Log;
 
 class AuthController
@@ -25,7 +27,7 @@ class AuthController
         $user = User::create([
             'name' => $validatedData['username'],
             'email' => $validatedData['email'],
-            'email_verified_at' => now(),
+           
                 'password' => Hash::make($validatedData['password']),
             'phone' => $validatedData['phone'],
         ]);
@@ -114,6 +116,51 @@ class AuthController
     }
 
     /**
+     * send verify email OTP 
+     */
+    public function sendVerifyEmailOtp(Request $request){
+        Log::info('Sending email verification OTP', ['email' => $request->email]);
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'fr_message' => 'Utilisateur non trouvé',
+                'ar_message' => 'المستخدم غير موجود'
+            ]);
+        }
+
+        // Generate OTP
+        $otpRecord = VerifyEmailOtp::generateOtp($request->email);
+
+        try {
+            // Send email
+            Mail::to($request->email)->send(new VerifyEmail($otpRecord->otp, $user->name));
+
+            return response()->json([
+                'fr_message' => 'OTP de vérification envoyé avec succès',
+                'ar_message' => 'تم إرسال رمز التحقق بنجاح',
+                'email' => $request->email
+            ], 200);
+
+        } catch (\Exception $e) {
+            // Delete the OTP if email sending fails
+            $otpRecord->delete();
+
+            Log::error('Failed to send email verification OTP: ' . $e->getMessage());
+
+            return response()->json([
+                'fr_message' => 'Echec de l'.'envoi de l'.'OTP. Veuillez essayer encore.',
+                'ar_message' => 'فشل في إرسال رمز التحقق. يرجى المحاولة مرة أخرى.'
+            ], 500);
+        }
+
+    }
+
+    /**
      * Reset password using OTP
      */
     public function resetPassword(Request $request)
@@ -189,6 +236,47 @@ class AuthController
 
         return response()->json([
             'message' => 'OTP verified successfully'
+        ], 200);
+    }
+    /**
+     * Verify email  OTP
+     */
+    public function verifyEmailOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'otp' => 'required|string|size:6',
+        ]);
+        $otpRecord = VerifyEmailOtp::where('email', $request->email)
+            ->where('otp', $request->otp)
+            ->where('used', false)
+            ->first();
+
+        if (!$otpRecord) {
+            return response()->json([
+                'fr_message' => 'OTP invalide',
+                'ar_message' => 'رمز التحقق غير صالح'
+            ]);
+        }
+
+        if ($otpRecord->isExpired()) {
+            return response()->json([
+                'fr_message' => 'OTP a expiré',
+                'ar_message' => 'رمز التحقق منتهي الصلاحية'
+            ]);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        $user->email_verified_at = now();
+        $user->save();
+        // Mark OTP as used
+        $otpRecord->markAsUsed();
+        //delete the otp record
+        $otpRecord->delete();
+
+        return response()->json([
+            'fr_message' => 'Email a été vérifié avec succès',
+            'ar_message' => 'تم التحقق من البريد الالكتروني بنجاح'
         ], 200);
     }
 }
