@@ -9,12 +9,12 @@
 <body class="bg-gray-100 min-h-screen">
     <header class="bg-gray-900 text-white py-4 mb-8">
         <div class="container mx-auto flex justify-between items-center px-4">
-            <h1 class="text-xl font-bold">Admin Panel</h1>
+            <h1 class="text-xl font-bold">Panneau d'administration</h1>
             <nav>
-                <a href="{{ route('admin.dashboard') }}" class="mr-4 hover:underline">Dashboard</a>
+                <a href="{{ route('admin.dashboard') }}" class="mr-4 hover:underline">Tableau de bord</a>
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf
-                    <button type="submit" class="hover:underline bg-transparent border-0 p-0 m-0 text-white cursor-pointer">Logout</button>
+                    <button type="submit" class="hover:underline bg-transparent border-0 p-0 m-0 text-white cursor-pointer">Déconnexion</button>
                 </form>
             </nav>
         </div>
