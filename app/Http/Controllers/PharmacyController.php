@@ -51,6 +51,10 @@ class PharmacyController extends Controller
             'longitude' => $request->longitude,
             'user_id' => Auth::id(),
         ]);
+        // Set user role to pharmacy
+        $user = Auth::user();
+        $user->role = 'pharmacy';
+        $user->save();
         return $pharmacy;
 
 

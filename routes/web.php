@@ -38,8 +38,8 @@ Route::middleware(['auth','verified'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     // Pharmacy routes
-    Route::get('/pharmacy/create', [PharmacyController::class, 'create'])->name('pharmacy.create');
-    Route::post('/pharmacy', [PharmacyController::class, 'store'])->name('pharmacy.store');
+    Route::get('/pharmacy/create', [\App\Http\Controllers\PharmacyController::class, 'create'])->name('pharmacy.create');
+    Route::post('/pharmacy', [\App\Http\Controllers\PharmacyController::class, 'store'])->name('pharmacy.store');
     Route::get('/pharmacy/edit', [PharmacyController::class, 'edit'])->name('pharmacy.edit');
     Route::put('/pharmacy', [PharmacyController::class, 'update'])->name('pharmacy.update');
     
@@ -61,5 +61,24 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/commandes/show/{commande}', [CommandeController::class, 'show'])->name('commandes.show');
 });
 
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::delete('/users/{user}', [\App\Http\Controllers\AdminDashboardController::class, 'destroyUser'])->name('admin.users.destroy');
+    Route::delete('/pharmacies/{pharmacy}', [\App\Http\Controllers\AdminDashboardController::class, 'destroyPharmacy'])->name('admin.pharmacies.destroy');
+    Route::get('/pharmacies/{pharmacy}', [\App\Http\Controllers\AdminDashboardController::class, 'pharmacyDetails'])->name('admin.pharmacies.details');
+    // More admin routes can be added here
+});
+
+Route::middleware(['auth', 'ensure.pharmacy', 'pharmacy'])->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    // Add more pharmacy routes here
+});
+
+Route::middleware(['auth', 'ensure.pharmacy', 'user'])->group(function () {
+    Route::get('/user/dashboard', function () {
+        return view('user.dashboard');
+    })->name('user.dashboard');
+    // Add more user routes here
+});
 
 require __DIR__.'/auth.php';

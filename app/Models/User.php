@@ -66,6 +66,20 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Commande::class);
     }
 
+    // Add role helper methods
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 
+    public function isPharmacy()
+    {
+        return $this->role === 'pharmacy';
+    }
+
+    public function isRegularUser()
+    {
+        return $this->role === 'user';
+    }
 
 }
