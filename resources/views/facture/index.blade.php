@@ -92,6 +92,14 @@
                         <span class="font-semibold">Total :</span>
                         <span class="font-bold">{{ number_format($commande->medications->sum('pivot.total_price'), 2) }} MRU</span>
                     </div>
+                    <div class="flex justify-between py-2 border-t border-gray-200">
+                        <span class="font-semibold">Livraison :</span>
+                        <span class="font-bold">{{ number_format($commande->shipping_price, 2) }} MRU</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-t border-gray-200">
+                        <span class="font-semibold">Total à payer :</span>
+                        <span class="font-bold text-blue-600">{{ number_format($commande->total_amount, 2) }} MRU</span>
+                    </div>
                 </div>
             </div>
         </div>

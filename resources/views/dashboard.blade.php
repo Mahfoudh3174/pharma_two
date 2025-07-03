@@ -485,6 +485,9 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Statut
                                 </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Location
+                                </th>
                                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Actions
                                 </th>
@@ -519,8 +522,14 @@
         {{ $status }}
     </span>
 </td>
+<td>
+  <a href="https://www.google.com/maps?q={{ $commande->latitude }},{{ $commande->longitude }}" target="_blank" class="text-blue-600 hover:text-blue-900 flex items-center gap-1">
+    📍 Location
+  </a>
+</td>
 
-                               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+
+      <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
     <div class="flex justify-end space-x-2">
         @php
             $status = $commande->status;

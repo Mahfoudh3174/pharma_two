@@ -60,15 +60,7 @@
             </div>
             <div style="float: right; text-align: right;">
                 <div>Date : {{ $commande->created_at->format('d/m/Y') }}</div>
-                <div>
-                    Statut :
-                    <span class="badge
-                        @if($commande->status == 'validee') green
-                        @elseif($commande->status == 'rejetee') red
-                        @else yellow @endif">
-                        {{ ucfirst($commande->status) }}
-                    </span>
-                </div>
+
             </div>
             <div style="clear: both;"></div>
         </div>
@@ -124,6 +116,14 @@
             <strong>Total :</strong>
             {{ number_format($commande->medications->sum('pivot.total_price'), 2) }} MRU
         </div>
+                            <div class="section" style="text-align: right;">
+                        <span class="font-semibold">Livraison :</span>
+                        <span class="font-bold">{{ $commande->shipping_price}} MRU</span>
+                    </div>
+                    <div class="section" style="text-align: right;">
+                        <span class="font-semibold">Total à payer :</span>
+                        <span class="font-bold text-blue-600">{{ number_format($commande->total_amount, 2) }} MRU</span>
+                    </div>
 
         <!-- Motif rejet -->
         @if($commande->status == 'rejetee' && $commande->reject_reason)

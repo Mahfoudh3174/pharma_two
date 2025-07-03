@@ -52,9 +52,9 @@ public function store(Request $request)
             'longitude' => $validatedData['longitude'] ?? null,
             'latitude' => $validatedData['latitude'] ?? null,
             'pharmacy_id' => $validatedData['pharmacy_id'],
-            'total_amount' => $validatedData['totalPrice'],
-            'delivery_type' => $validatedData['deliveryType'],
-            'shipping_price' => $validatedData['shipping_price']
+            'total_amount' => $validatedData['totalPrice']+$validatedData['shipping_price'],
+            'type' => $validatedData['deliveryType'],
+            'shipping_price' => $validatedData['deliveryType']=="SURE PLACE"?0:$validatedData['shipping_price'],
         ]);
 
         foreach ($validatedData['cardItems'] as $item) {
