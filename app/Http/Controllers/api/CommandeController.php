@@ -16,7 +16,13 @@ class CommandeController extends Controller
 
 public function store(Request $request)
 {
-    Log::info($request->all());
+
+
+
+try {
+    Log::info('Creating new commande', [
+        'input' => $request->all(),
+    ]);
 
     $validatedData = $request->validate([
         'totalPrice' => 'required|numeric|min:1',
@@ -27,10 +33,18 @@ public function store(Request $request)
         'cardItems.*.medication.id' => 'required|exists:medications,id',
         'cardItems.*.quantity' => 'required|integer|min:1',
         'cardItems.*.medication.price' => 'required|numeric|min:1',
-        "deliveryType"=>"required|in:SURE PLACE,LIVRAISON",
-        'shipping_price' => 'required|numeric|min:1',
-        "lang"=> 'required|in:ar,fr',
+        'deliveryType' => 'required|in:SURE PLACE,LIVRAISON',
+        'shipping_price' => 'required|numeric|min:0',
+        'lang' => 'required|in:ar,fr',
     ]);
+} catch (ValidationException $e) {
+    Log::info('Validation failed when creating commande', [
+        'errors' => $e->errors(),
+        'input' => $request->all(),
+    ]);
+    throw $e; // re-throw so Laravel still returns the 422 response
+}
+
     $user = Auth::user();
     if (!$user) {
         return response()->json(['message' => 'Unauthorized'], 401);

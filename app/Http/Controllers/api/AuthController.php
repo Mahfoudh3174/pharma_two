@@ -78,7 +78,6 @@ class AuthController
      */
     public function sendPasswordResetOtp(Request $request)
     {
-        Log::info('Sending password reset OTP', ['email' => $request->email]);
         $request->validate([
             'email' => 'required|email|exists:users,email',
         ]);
@@ -107,7 +106,6 @@ class AuthController
             // Delete the OTP if email sending fails
             $otpRecord->delete();
 
-            Log::error('Failed to send password reset OTP: ' . $e->getMessage());
 
             return response()->json([
                 'message' => 'Failed to send OTP. Please try again later.'
@@ -119,7 +117,6 @@ class AuthController
      * send verify email OTP 
      */
     public function sendVerifyEmailOtp(Request $request){
-        Log::info('Sending email verification OTP', ['email' => $request->email]);
         $request->validate([
             'email' => 'required|email|exists:users,email',
         ]);
@@ -150,7 +147,6 @@ class AuthController
             // Delete the OTP if email sending fails
             $otpRecord->delete();
 
-            Log::error('Failed to send email verification OTP: ' . $e->getMessage());
 
             return response()->json([
                 'fr_message' => 'Echec de l'.'envoi de l'.'OTP. Veuillez essayer encore.',

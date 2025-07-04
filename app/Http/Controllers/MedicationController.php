@@ -44,6 +44,24 @@ class MedicationController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
             'quantity' => 'required|integer|min:0',
             'description' => 'required|string|max:1000',
+        ],[
+            'name.unique' => 'le nom du médicament doit être unique dans votre pharmacie.',
+            'name.required' => 'Le nom du médicament est obligatoire.',
+            'generic_name.required' => 'Le nom générique est obligatoire.',
+            'category.required' => 'La catégorie est obligatoire.',
+            'dosage_form.required' => 'La forme posologique est obligatoire.',
+            'strength.required' => 'La force est obligatoire.',
+            'price.required' => 'Le prix est obligatoire.',
+            'price.numeric' => 'Le prix doit être un nombre.',
+            'price.min' => 'Le prix doit être supérieur ou égal à 0.',
+            'image.image' => 'Le fichier doit être une image.',
+            'image.mimes' => 'L\'image doit être au format jpeg, png, jpg ou svg.',
+            'image.max' => 'L\'image ne doit pas dépasser 2MB.',
+            'quantity.required' => 'La quantité est obligatoire.',
+            'quantity.integer' => 'La quantité doit être un nombre entier.',
+            'quantity.min' => 'La quantité doit être supérieure ou égale à 0.',
+            'description.required' => 'La description est obligatoire.',
+            'description.max' => 'La description ne doit pas dépasser 1000 caractères.',
         ]);
 
         // Handle image upload

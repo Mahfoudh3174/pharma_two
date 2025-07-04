@@ -15,11 +15,7 @@ use Illuminate\Validation\ValidationException;
 
 
 Route::post('/login', function (Request $request) {
- Log::info('request: '. $request->token);
-           $request->validate([
-            'credential' => 'required|string',
-            'password' => 'required|string',
-        ]);
+
 
 
 

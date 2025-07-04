@@ -13,7 +13,7 @@ class AdminDashboardController extends Controller
     {
         $userCount = User::count();
         $pharmacyCount = Pharmacy::count();
-        $totalSales = Commande::where('status', 'VALIDEE')->sum('total_amount');
+        $totalSales = Commande::where('status', 'LIVRÉ')->sum('total_amount');
         $adminId = auth()->id();
         // Users with pharmacies (owners)
         $usersWithPharmacies = User::where('id', '!=', $adminId)
@@ -51,7 +51,7 @@ class AdminDashboardController extends Controller
     public function pharmacyDetails(\App\Models\Pharmacy $pharmacy)
     {
         $orders = $pharmacy->commandes()->with('user')->orderByDesc('created_at')->get();
-        $totalSales = $pharmacy->commandes()->where('status', 'VALIDEE')->sum('total_amount');
+        $totalSales = $pharmacy->commandes()->where('status', 'LIVRÉ')->sum('total_amount');
         return view('admin.pharmacies.details', [
             'pharmacy' => $pharmacy,
             'orders' => $orders,

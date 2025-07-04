@@ -32,8 +32,8 @@ class DatabaseSeeder extends Seeder
 
         // Create pharmacies with owners
         $pharmacies = Pharmacy::factory(1)->create([
-            'user_id' => function() use ($admin) {
-                return $admin->id; // Assign the admin user as the owner of the pharmacy
+            'user_id' => function() use ($users) {
+                return $users->random()->id; 
             },
         ]);
 
@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
         $categories = Category::all();
         $medications = Medication::factory(50)->create([
             'category_id' => fn() => $categories->random()->id,
-            'image' => fn() => "medications/E9RyOKMH6jPvFcftk601ho2dkuzihjPd4pGNY2bo.jpg",
+            'image' => fn() => "medications/ED55AE56EltK8Z7JLMEwlcI13VDV6nF0EMoPDaJKR.jpg",
             'pharmacy_id' => fn() => $pharmacies->first()->id, // Assign medications to the first pharmacy
         ]);
 

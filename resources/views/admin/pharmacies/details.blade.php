@@ -36,6 +36,7 @@
                             <span class="inline-block px-2 py-1 rounded text-xs font-semibold
                                 @if($order->status === 'VALIDEE') bg-green-100 text-green-800
                                 @elseif($order->status === 'REJETEE') bg-red-100 text-red-800
+                                @elseif($order->status === 'LIVRÉ') bg-blue-100 text-gray-800
                                 @else bg-yellow-100 text-yellow-800 @endif">
                                 {{ $order->status }}
                             </span>
