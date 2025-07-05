@@ -58,4 +58,21 @@ class AdminDashboardController extends Controller
             'totalSales' => $totalSales,
         ]);
     }
+
+    public function editPharmacy(Pharmacy $pharmacy)
+    {
+        return view('admin.pharmacies.edit', compact('pharmacy'));
+    }
+
+    public function updatePharmacy(Request $request, Pharmacy $pharmacy)
+    {
+        $validated = $request->validate([
+            'latitude' => ['required', 'numeric', 'between:-90,90'],
+            'longitude' => ['required', 'numeric', 'between:-180,180'],
+        ]);
+
+        $pharmacy->update($validated);
+
+        return redirect()->route('admin.pharmacies.details', $pharmacy)->with('success', 'Pharmacy updated successfully.');
+    }
 } 

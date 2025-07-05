@@ -66,6 +66,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/users/{user}', [\App\Http\Controllers\AdminDashboardController::class, 'destroyUser'])->name('admin.users.destroy');
     Route::delete('/pharmacies/{pharmacy}', [\App\Http\Controllers\AdminDashboardController::class, 'destroyPharmacy'])->name('admin.pharmacies.destroy');
     Route::get('/pharmacies/{pharmacy}', [\App\Http\Controllers\AdminDashboardController::class, 'pharmacyDetails'])->name('admin.pharmacies.details');
+    Route::get('/pharmacies/{pharmacy}/edit', [\App\Http\Controllers\AdminDashboardController::class, 'editPharmacy'])->name('admin.pharmacies.edit');
+    Route::put('/pharmacies/{pharmacy}', [\App\Http\Controllers\AdminDashboardController::class, 'updatePharmacy'])->name('admin.pharmacies.update');
     // More admin routes can be added here
 });
 

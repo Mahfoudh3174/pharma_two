@@ -4,7 +4,7 @@
         <div class="flex justify-between items-center h-16">
             <!-- Logo/Branding -->
             <div class="flex-shrink-0 flex items-center">
-                <span class="text-xl font-bold text-blue-600">Saydeliytek</span></span>
+                <span class="text-xl font-bold text-blue-600">Saydelyti</span></span>
             </div>
             
             <!-- Navigation -->

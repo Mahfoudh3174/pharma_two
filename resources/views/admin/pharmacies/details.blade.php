@@ -9,6 +9,7 @@
         <div class="text-gray-600 mb-2">Localisation : <span class="font-semibold">Lat : {{ $pharmacy->latitude }}, Lng : {{ $pharmacy->longitude }}</span></div>
         <div class="text-gray-600 mb-2">Ville : <span class="font-semibold">{{ $pharmacy->city }}</span> | Wilaya : <span class="font-semibold">{{ $pharmacy->state }}</span></div>
         <div class="mt-4 bg-green-100 text-green-800 px-4 py-2 rounded inline-block font-semibold">Ventes totales : {{ $totalSales }} MRU</div>
+        <a href="{{ route('admin.pharmacies.edit', $pharmacy) }}" class="mt-4 ml-4 inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">Modifier</a>
     </div>
 
     <div class="mb-8">

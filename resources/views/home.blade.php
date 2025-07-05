@@ -16,7 +16,7 @@
                         <span class="block text-blue-200">gestion pharmaceutique</span>
                     </h1>
                     <p class="mt-6 text-xl text-blue-100 leading-relaxed">
-                        Saydeliytek automatise vos processus et simplifie la gestion quotidienne de votre officine.
+                        Saydelyti automatise vos processus et simplifie la gestion quotidienne de votre officine.
                     </p>
                     <div class="mt-10 flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
                         
@@ -136,7 +136,7 @@
                 <div class="bg-gradient-to-r from-blue-600 to-teal-600 rounded-2xl shadow-xl overflow-hidden">
                     <div class="px-6 py-12 sm:p-16">
                         <div class="max-w-3xl mx-auto text-center">
-                            <h2 class="text-3xl font-extrabold text-white">Saydeliytek en chiffres</h2>
+                            <h2 class="text-3xl font-extrabold text-white">Saydelyti en chiffres</h2>
                             <p class="mt-4 text-lg text-blue-100">
                                 La solution préférée des professionnels de santé
                             </p>

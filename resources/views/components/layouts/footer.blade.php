@@ -4,7 +4,7 @@
         
             <div class="mt-4 md:mt-0 md:order-1">
                 <p class="text-center text-sm text-gray-500">
-                  Saydeliytek {{ date('Y') }} &copy;  . Tous droits réservés.
+                  Saydelyti {{ date('Y') }} &copy;  . Tous droits réservés.
                 </p>
             </div>
         
