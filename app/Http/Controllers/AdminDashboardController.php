@@ -169,11 +169,21 @@ class AdminDashboardController extends Controller
         $orders = $ordersQuery->orderBy($sortBy, $sortOrder)->paginate($perPage)->appends($request->query());
 
         $totalSales = $pharmacy->commandes()->where('status', 'LIVRÉ')->sum('total_amount');
+        $totalOrdersCount = $pharmacy->commandes()->count();
+        $validatedOrdersCount = $pharmacy->commandes()->where('status', 'VALIDEE')->count();
+        $rejectedOrdersCount = $pharmacy->commandes()->where('status', 'REJETEE')->count();
+        $deliveredOrdersCount = $pharmacy->commandes()->where('status', 'LIVRÉ')->count();
+        $pendingOrdersCount = $pharmacy->commandes()->where('status', 'PENDING')->count();
 
         return view('admin.pharmacies.details', [
             'pharmacy' => $pharmacy,
             'orders' => $orders,
             'totalSales' => $totalSales,
+            'totalOrdersCount' => $totalOrdersCount,
+            'validatedOrdersCount' => $validatedOrdersCount,
+            'rejectedOrdersCount' => $rejectedOrdersCount,
+            'deliveredOrdersCount' => $deliveredOrdersCount,
+            'pendingOrdersCount' => $pendingOrdersCount,
             'search' => $search,
             'sortBy' => $sortBy,
             'sortOrder' => $sortOrder,

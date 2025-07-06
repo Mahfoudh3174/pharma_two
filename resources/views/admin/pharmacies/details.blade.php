@@ -12,6 +12,55 @@
         <a href="{{ route('admin.pharmacies.edit', $pharmacy) }}" class="mt-4 ml-4 inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">Modifier</a>
     </div>
 
+    <!-- Order Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white p-6 rounded-xl shadow flex items-center gap-4">
+            <div class="bg-blue-100 p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 font-medium">Total Commandes</p>
+                <p class="text-2xl font-bold text-gray-900">{{ $totalOrdersCount }}</p>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow flex items-center gap-4">
+            <div class="bg-green-100 p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 font-medium">Commandes Validées</p>
+                <p class="text-2xl font-bold text-gray-900">{{ $validatedOrdersCount }}</p>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow flex items-center gap-4">
+            <div class="bg-red-100 p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 font-medium">Commandes Rejetées</p>
+                <p class="text-2xl font-bold text-gray-900">{{ $rejectedOrdersCount }}</p>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow flex items-center gap-4">
+            <div class="bg-purple-100 p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m0 0l7 7 7-7M19 10v10a1 1 0 001 1h3" /></svg>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 font-medium">Commandes Livrées</p>
+                <p class="text-2xl font-bold text-gray-900">{{ $deliveredOrdersCount }}</p>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow flex items-center gap-4">
+            <div class="bg-yellow-100 p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 font-medium">Commandes En Cours</p>
+                <p class="text-2xl font-bold text-gray-900">{{ $pendingOrdersCount }}</p>
+            </div>
+        </div>
+    </div>
+
     <div class="mb-8">
         <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
             <svg class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h2a4 4 0 014 4v2" /></svg>
