@@ -11,41 +11,59 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
-        $userCount = User::count();
-        $pharmacyCount = Pharmacy::count();
+        $userCount = User::where('status', 'active')->count();
+        $pharmacyCount = Pharmacy::where('status', 'active')->count();
         $totalSales = Commande::where('status', 'LIVRÉ')->sum('total_amount');
         $adminId = auth()->id();
-        // Users with pharmacies (owners)
-        $usersWithPharmacies = User::where('id', '!=', $adminId)
+
+        // Active users
+        $activeUsersWithPharmacies = User::where('id', '!=', $adminId)
+            ->where('status', 'active')
             ->whereHas('pharmacy')->with('pharmacy')->get();
-        // Regular users (no pharmacy)
-        $regularUsers = User::where('id', '!=', $adminId)
+        $activeRegularUsers = User::where('id', '!=', $adminId)
+            ->where('status', 'active')
             ->whereDoesntHave('pharmacy')->get();
-        $pharmacies = Pharmacy::with('user')->get();
+
+        // Inactive users
+        $inactiveUsersWithPharmacies = User::where('id', '!=', $adminId)
+            ->where('status', 'inactive')
+            ->whereHas('pharmacy')->with('pharmacy')->get();
+        $inactiveRegularUsers = User::where('id', '!=', $adminId)
+            ->where('status', 'inactive')
+            ->whereDoesntHave('pharmacy')->get();
+
+        // Active and inactive pharmacies
+        $activePharmacies = Pharmacy::with('user')->where('status', 'active')->get();
+        $inactivePharmacies = Pharmacy::with('user')->where('status', 'inactive')->get();
 
         return view('admin.dashboard', [
             'userCount' => $userCount,
             'pharmacyCount' => $pharmacyCount,
             'totalSales' => $totalSales,
-            'usersWithPharmacies' => $usersWithPharmacies,
-            'regularUsers' => $regularUsers,
-            'pharmacies' => $pharmacies,
+            'activeUsersWithPharmacies' => $activeUsersWithPharmacies,
+            'activeRegularUsers' => $activeRegularUsers,
+            'inactiveUsersWithPharmacies' => $inactiveUsersWithPharmacies,
+            'inactiveRegularUsers' => $inactiveRegularUsers,
+            'activePharmacies' => $activePharmacies,
+            'inactivePharmacies' => $inactivePharmacies,
         ]);
     }
 
-    public function destroyUser(User $user)
+    public function toggleUserStatus(User $user)
     {
         if ($user->isAdmin()) {
-            return back()->with('error', 'Cannot delete admin user.');
+            return back()->with('error', 'Cannot change status of admin user.');
         }
-        $user->delete();
-        return back()->with('success', 'User deleted successfully.');
+        $user->status = $user->status === 'active' ? 'inactive' : 'active';
+        $user->save();
+        return back()->with('success', 'User status updated successfully.');
     }
 
-    public function destroyPharmacy(Pharmacy $pharmacy)
+    public function togglePharmacyStatus(Pharmacy $pharmacy)
     {
-        $pharmacy->delete();
-        return back()->with('success', 'Pharmacy deleted successfully.');
+        $pharmacy->status = $pharmacy->status === 'active' ? 'inactive' : 'active';
+        $pharmacy->save();
+        return back()->with('success', 'Pharmacy status updated successfully.');
     }
 
     public function pharmacyDetails(\App\Models\Pharmacy $pharmacy)

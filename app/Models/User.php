@@ -19,7 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var list<string>
      */
     protected $guarded = [
-'id'
+'id','status'
     ];
 
     /**

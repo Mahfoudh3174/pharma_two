@@ -63,8 +63,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    Route::delete('/users/{user}', [\App\Http\Controllers\AdminDashboardController::class, 'destroyUser'])->name('admin.users.destroy');
-    Route::delete('/pharmacies/{pharmacy}', [\App\Http\Controllers\AdminDashboardController::class, 'destroyPharmacy'])->name('admin.pharmacies.destroy');
+    Route::patch('/users/{user}/toggle-status', [\App\Http\Controllers\AdminDashboardController::class, 'toggleUserStatus'])->name('admin.users.toggle_status');
+    Route::patch('/pharmacies/{pharmacy}/toggle-status', [\App\Http\Controllers\AdminDashboardController::class, 'togglePharmacyStatus'])->name('admin.pharmacies.toggle_status');
     Route::get('/pharmacies/{pharmacy}', [\App\Http\Controllers\AdminDashboardController::class, 'pharmacyDetails'])->name('admin.pharmacies.details');
     Route::get('/pharmacies/{pharmacy}/edit', [\App\Http\Controllers\AdminDashboardController::class, 'editPharmacy'])->name('admin.pharmacies.edit');
     Route::put('/pharmacies/{pharmacy}', [\App\Http\Controllers\AdminDashboardController::class, 'updatePharmacy'])->name('admin.pharmacies.update');

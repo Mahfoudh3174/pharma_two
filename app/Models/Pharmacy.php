@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pharmacy extends Model
 {
     use HasFactory;
-    protected $guarded = ['id'];
+    protected $guarded = ['id','status'];
 
         public function medications()
     {
