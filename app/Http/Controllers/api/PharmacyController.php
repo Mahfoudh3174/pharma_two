@@ -17,6 +17,7 @@ class PharmacyController extends Controller
     {
         // Fetch all pharmacies
         $pharmacies = Pharmacy::with(['medications.category'])
+        ->where('status', 'active') 
         ->when($request->search, function ($query) use ($request) {
             $query->where('name', 'like', '%' . $request->search . '%');
         })->

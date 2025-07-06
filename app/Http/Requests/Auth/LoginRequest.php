@@ -57,6 +57,14 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Check if the user has an associated pharmacy and if it's active
+        if ($user->isPharmacy() && $user->pharmacy && $user->pharmacy->status !== 'active') {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'email' => ['Your associated pharmacy is inactive. Please contact an administrator.'],
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

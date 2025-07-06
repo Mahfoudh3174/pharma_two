@@ -62,197 +62,6 @@
         </div>
     </form>
 
-    <!-- Users with Pharmacies -->
-    <div class="mb-12">
-        <div class="flex items-center gap-2 mb-4">
-            <svg class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-4V7a4 4 0 10-8 0v3m12 4v1a2 2 0 01-2 2H6a2 2 0 01-2-2v-1" /></svg>
-            <h2 class="text-xl font-bold text-gray-800">Utilisateurs avec pharmacies</h2>
-        </div>
-        <div class="overflow-x-auto rounded-xl shadow">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ID</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nom</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Pharmacie</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-100">
-                    @forelse($activeUsersWithPharmacies as $user)
-                    <tr class="hover:bg-blue-50 transition">
-                        <td class="px-6 py-3">{{ $user->id }}</td>
-                        <td class="px-6 py-3 font-semibold text-gray-800">{{ $user->name }}</td>
-                        <td class="px-6 py-3">{{ $user->email }}</td>
-                        <td class="px-6 py-3">
-                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">{{ $user->pharmacy->name ?? '-' }}</span>
-                        </td>
-                        <td class="px-6 py-3">
-                            <span class="inline-block bg-{{ $user->status === 'active' ? 'green' : 'red' }}-100 text-{{ $user->status === 'active' ? 'green' : 'red' }}-800 text-xs px-2 py-1 rounded-full">{{ $user->status }}</span>
-                        </td>
-                        <td class="px-6 py-3">
-                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST" class="inline-block">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-500 hover:bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-600 text-white px-3 py-1 rounded shadow">{{ $user->status === 'active' ? 'Désactiver' : 'Activer' }}</button>
-                            </form>
-                            <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">Edit</a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr><td colspan="5" class="py-4 text-center text-gray-400">Aucun utilisateur avec pharmacie trouvé.</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        <div class="mt-4">
-            {{ $activeUsersWithPharmacies->appends(request()->query())->links() }}
-        </div>
-    </div>
-
-    <!-- Inactive Users with Pharmacies -->
-    <div class="mb-12">
-        <div class="flex items-center gap-2 mb-4">
-            <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-4V7a4 4 0 10-8 0v3m12 4v1a2 2 0 01-2 2H6a2 2 0 01-2-2v-1" /></svg>
-            <h2 class="text-xl font-bold text-gray-800">Utilisateurs inactifs avec pharmacies</h2>
-        </div>
-        <div class="overflow-x-auto rounded-xl shadow">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ID</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nom</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Pharmacie</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-100">
-                    @forelse($inactiveUsersWithPharmacies as $user)
-                    <tr class="hover:bg-red-50 transition">
-                        <td class="px-6 py-3">{{ $user->id }}</td>
-                        <td class="px-6 py-3 font-semibold text-gray-800">{{ $user->name }}</td>
-                        <td class="px-6 py-3">{{ $user->email }}</td>
-                        <td class="px-6 py-3">
-                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">{{ $user->pharmacy->name ?? '-' }}</span>
-                        </td>
-                        <td class="px-6 py-3">
-                            <span class="inline-block bg-{{ $user->status === 'active' ? 'green' : 'red' }}-100 text-{{ $user->status === 'active' ? 'green' : 'red' }}-800 text-xs px-2 py-1 rounded-full">{{ $user->status }}</span>
-                        </td>
-                        <td class="px-6 py-3">
-                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST" class="inline-block">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-500 hover:bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-600 text-white px-3 py-1 rounded shadow">{{ $user->status === 'active' ? 'Désactiver' : 'Activer' }}</button>
-                            </form>
-                            <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">Edit</a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr><td colspan="5" class="py-4 text-center text-gray-400">Aucun utilisateur inactif avec pharmacie trouvé.</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        <div class="mt-4">
-            {{ $inactiveUsersWithPharmacies->appends(request()->query())->links() }}
-        </div>
-    </div>
-
-    <!-- Regular Users -->
-    <div class="mb-12">
-        <div class="flex items-center gap-2 mb-4">
-            <svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-            <h2 class="text-xl font-bold text-gray-800">Utilisateurs réguliers</h2>
-        </div>
-        <div class="overflow-x-auto rounded-xl shadow">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ID</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nom</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-100">
-                    @forelse($activeRegularUsers as $user)
-                    <tr class="hover:bg-green-50 transition">
-                        <td class="px-6 py-3">{{ $user->id }}</td>
-                        <td class="px-6 py-3 font-semibold text-gray-800">{{ $user->name }}</td>
-                        <td class="px-6 py-3">{{ $user->email }}</td>
-                        <td class="px-6 py-3">
-                            <span class="inline-block bg-{{ $user->status === 'active' ? 'green' : 'red' }}-100 text-{{ $user->status === 'active' ? 'green' : 'red' }}-800 text-xs px-2 py-1 rounded-full">{{ $user->status }}</span>
-                        </td>
-                        <td class="px-6 py-3">
-                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST" class="inline-block">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-500 hover:bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-600 text-white px-3 py-1 rounded shadow">{{ $user->status === 'active' ? 'Désactiver' : 'Activer' }}</button>
-                            </form>
-                            <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">Edit</a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr><td colspan="4" class="py-4 text-center text-gray-400">Aucun utilisateur régulier trouvé.</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="mt-4">
-            {{ $inactiveRegularUsers->appends(request()->query())->links() }}
-        </div>
-
-    <!-- Inactive Regular Users -->
-    <div class="mb-12">
-        <div class="flex items-center gap-2 mb-4">
-            <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-            <h2 class="text-xl font-bold text-gray-800">Utilisateurs réguliers inactifs</h2>
-        </div>
-        <div class="overflow-x-auto rounded-xl shadow">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ID</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nom</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-100">
-                    @forelse($inactiveRegularUsers as $user)
-                    <tr class="hover:bg-red-50 transition">
-                        <td class="px-6 py-3">{{ $user->id }}</td>
-                        <td class="px-6 py-3 font-semibold text-gray-800">{{ $user->name }}</td>
-                        <td class="px-6 py-3">{{ $user->email }}</td>
-                        <td class="px-6 py-3">
-                            <span class="inline-block bg-{{ $user->status === 'active' ? 'green' : 'red' }}-100 text-{{ $user->status === 'active' ? 'green' : 'red' }}-800 text-xs px-2 py-1 rounded-full">{{ $user->status }}</span>
-                        </td>
-                        <td class="px-6 py-3">
-                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST" class="inline-block">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-500 hover:bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-600 text-white px-3 py-1 rounded shadow">{{ $user->status === 'active' ? 'Désactiver' : 'Activer' }}</button>
-                            </form>
-                            <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">Edit</a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr><td colspan="4" class="py-4 text-center text-gray-400">Aucun utilisateur régulier inactif trouvé.</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        <div class="mt-4">
-            {{ $inactiveRegularUsers->appends(request()->query())->links() }}
-        </div>
-    </div>
 
     <!-- Pharmacies -->
     <div>
@@ -337,5 +146,205 @@
             {{ $inactivePharmacies->appends(request()->query())->links() }}
         </div>
     </div>
+
+    <!-- Users with Pharmacies -->
+    <div class="mb-12">
+        <div class="flex items-center gap-2 mb-4">
+            <svg class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-4V7a4 4 0 10-8 0v3m12 4v1a2 2 0 01-2 2H6a2 2 0 01-2-2v-1" /></svg>
+            <h2 class="text-xl font-bold text-gray-800">Les Pharmaciens actifs</h2>
+        </div>
+        <div class="overflow-x-auto rounded-xl shadow">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nom</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Pharmacie</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-100">
+                    @forelse($activeUsersWithPharmacies as $user)
+                    <tr class="hover:bg-blue-50 transition">
+                        <td class="px-6 py-3">{{ $user->id }}</td>
+                        <td class="px-6 py-3 font-semibold text-gray-800">{{ $user->name }}</td>
+                        <td class="px-6 py-3">{{ $user->email }}</td>
+                        <td class="px-6 py-3">
+                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">{{ $user->pharmacy->name ?? '-' }}</span>
+                        </td>
+                        <td class="px-6 py-3">
+                            <span class="inline-block bg-{{ $user->status === 'active' ? 'green' : 'red' }}-100 text-{{ $user->status === 'active' ? 'green' : 'red' }}-800 text-xs px-2 py-1 rounded-full">{{ $user->status }}</span>
+                        </td>
+                        <td class="px-6 py-3">
+                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST" class="inline-block">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-500 hover:bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-600 text-white px-3 py-1 rounded shadow">{{ $user->status === 'active' ? 'Désactiver' : 'Activer' }}</button>
+                            </form>
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">Edit</a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td colspan="5" class="py-4 text-center text-gray-400">Aucun utilisateur avec pharmacie trouvé.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-4">
+            {{ $activeUsersWithPharmacies->appends(request()->query())->links() }}
+        </div>
+    </div>
+
+    <!-- Inactive Users with Pharmacies -->
+    <div class="mb-12">
+        <div class="flex items-center gap-2 mb-4">
+            <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-4V7a4 4 0 10-8 0v3m12 4v1a2 2 0 01-2 2H6a2 2 0 01-2-2v-1" /></svg>
+            <h2 class="text-xl font-bold text-gray-800">Les Pharmaciens inactifs</h2>
+        </div>
+        <div class="overflow-x-auto rounded-xl shadow">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nom</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Pharmacie</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-100">
+                    @forelse($inactiveUsersWithPharmacies as $user)
+                    <tr class="hover:bg-red-50 transition">
+                        <td class="px-6 py-3">{{ $user->id }}</td>
+                        <td class="px-6 py-3 font-semibold text-gray-800">{{ $user->name }}</td>
+                        <td class="px-6 py-3">{{ $user->email }}</td>
+                        <td class="px-6 py-3">
+                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">{{ $user->pharmacy->name ?? '-' }}</span>
+                        </td>
+                        <td class="px-6 py-3">
+                            <span class="inline-block bg-{{ $user->status === 'active' ? 'green' : 'red' }}-100 text-{{ $user->status === 'active' ? 'green' : 'red' }}-800 text-xs px-2 py-1 rounded-full">{{ $user->status }}</span>
+                        </td>
+                        <td class="px-6 py-3">
+                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST" class="inline-block">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-500 hover:bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-600 text-white px-3 py-1 rounded shadow">{{ $user->status === 'active' ? 'Désactiver' : 'Activer' }}</button>
+                            </form>
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">Edit</a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td colspan="5" class="py-4 text-center text-gray-400">Aucun utilisateur inactif avec pharmacie trouvé.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-4">
+            {{ $inactiveUsersWithPharmacies->appends(request()->query())->links() }}
+        </div>
+    </div>
+
+    <!-- Regular Users -->
+    <div class="mb-12">
+        <div class="flex items-center gap-2 mb-4">
+            <svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            <h2 class="text-xl font-bold text-gray-800">Utilisateurs réguliers</h2>
+        </div>
+        <div class="overflow-x-auto rounded-xl shadow">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nom</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Telephone</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-100">
+                    @forelse($activeRegularUsers as $user)
+                    <tr class="hover:bg-green-50 transition">
+                        <td class="px-6 py-3">{{ $user->id }}</td>
+                        <td class="px-6 py-3 font-semibold text-gray-800">{{ $user->name }}</td>
+                        <td class="px-6 py-3">{{ $user->email }}</td>
+                        <td class="px-6 py-3">{{ $user->phone ?? '-' }}</td>
+                        <td class="px-6 py-3">
+                            <span class="inline-block bg-{{ $user->status === 'active' ? 'green' : 'red' }}-100 text-{{ $user->status === 'active' ? 'green' : 'red' }}-800 text-xs px-2 py-1 rounded-full">{{ $user->status }}</span>
+                        </td>
+                        <td class="px-6 py-3">
+                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST" class="inline-block">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-500 hover:bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-600 text-white px-3 py-1 rounded shadow">{{ $user->status === 'active' ? 'Désactiver' : 'Activer' }}</button>
+                            </form>
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">Edit</a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="py-4 text-center text-gray-400">Aucun utilisateur régulier trouvé.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="mt-4">
+            {{ $inactiveRegularUsers->appends(request()->query())->links() }}
+        </div>
+
+    <!-- Inactive Regular Users -->
+    <div class="mb-12">
+        <div class="flex items-center gap-2 mb-4">
+            <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            <h2 class="text-xl font-bold text-gray-800">Utilisateurs réguliers inactifs</h2>
+        </div>
+        <div class="overflow-x-auto rounded-xl shadow">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nom</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Telephone</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-100">
+                    @forelse($inactiveRegularUsers as $user)
+                    <tr class="hover:bg-red-50 transition">
+                        <td class="px-6 py-3">{{ $user->id }}</td>
+                        <td class="px-6 py-3 font-semibold text-gray-800">{{ $user->name }}</td>
+                        <td class="px-6 py-3">{{ $user->email }}</td>
+                        <td class="px-6 py-3">{{ $user->phone ?? '-' }}</td>
+                        <td class="px-6 py-3">
+                            <span class="inline-block bg-{{ $user->status === 'active' ? 'green' : 'red' }}-100 text-{{ $user->status === 'active' ? 'green' : 'red' }}-800 text-xs px-2 py-1 rounded-full">{{ $user->status }}</span>
+                        </td>
+                        <td class="px-6 py-3">
+                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST" class="inline-block">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-500 hover:bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-600 text-white px-3 py-1 rounded shadow">{{ $user->status === 'active' ? 'Désactiver' : 'Activer' }}</button>
+                            </form>
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">Edit</a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td colspan="4" class="py-4 text-center text-gray-400">Aucun utilisateur régulier inactif trouvé.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-4">
+            {{ $inactiveRegularUsers->appends(request()->query())->links() }}
+        </div>
+    </div>
+
+    
 </div>
 @endsection 

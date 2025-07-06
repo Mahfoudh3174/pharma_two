@@ -27,8 +27,9 @@ Route::post('/login', function (Request $request) {
 
         // Attempt authentication
         if (!Auth::attempt([$field => $request->credential, 'password' => $request->password])) {
-            throw ValidationException::withMessages([
-                'credential' => ['The provided credentials are incorrect.'],
+           return response()->json([
+                'fr_message' => 'Identifiant ou mot de passe incorrect.',
+                'ar_message' => 'اسم المستخدم أو كلمة المرور غير صحيحة.',
             ]);
         }
         
@@ -37,18 +38,20 @@ Route::post('/login', function (Request $request) {
 
         if ($user->status !== 'active') {
             Auth::logout();
-            throw ValidationException::withMessages([
-                'credential' => ['Your account is inactive. Please contact an administrator.'],
+            return response()->json([
+                'fr_message' => 'Votre compte est inactif. Veuillez contacter un administrateur.',
+                'ar_message' => 'حسابك غير نشط. يرجى الاتصال بالمسؤول.',
             ]);
         }
 
-        $hasPharmacy = Pharmacy::where('user_id', $user->id)->exists();
-
-    if ($hasPharmacy) {
-        throw ValidationException::withMessages([
-            'user' => ['Invalid user. This account is linked to a pharmacy.'],
-        ]);
-    }
+        // Check if the user is a pharmacy and if their associated pharmacy is inactive
+        if ($user->isPharmacy() && $user->pharmacy ) {
+            Auth::logout();
+            return response()->json([
+                'fr_message' => "L'utilisateur n'existe pas.",
+                'ar_message' => 'المستخدم غير موجود.',
+            ]);
+        }
         Fcm::where('user_id', '=', $user->id)->delete();
 
         Fcm::updateOrCreate(['token' => $request->token, 'user_id' => $user->id]);
