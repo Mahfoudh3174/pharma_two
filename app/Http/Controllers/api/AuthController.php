@@ -19,10 +19,17 @@ class AuthController
     {
         $validatedData = $request->validate([
             'username' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|string|max:15|unique:users|regex:/^[2-4][0-9]{7}$/',
+            'email' => 'required|string|email|max:255',
+            'phone' => 'required|string|max:15|regex:/^[2-4][0-9]{7}$/',
             'password' => 'required|string',
         ]);
+        // Check if the email, phone already exists
+        if (User::where('email', $validatedData['email'])->exists() || User::where('phone', $validatedData['phone'])->exists()) {
+            return response()->json([
+                'fr_message' => 'Email ou téléphone déjà utilisé',
+                'ar_message' => 'البريد الإلكتروني أو الهاتف مستخدم بالفعل'
+            ]);
+        }
 
         $user = User::create([
             'name' => $validatedData['username'],
