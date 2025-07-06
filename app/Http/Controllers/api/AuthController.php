@@ -176,14 +176,16 @@ class AuthController
 
         if (!$otpRecord) {
             return response()->json([
-                'message' => 'Invalid OTP'
-            ], 400);
+                "fr_message" => "OTP invalide",
+                "ar_message" => "رمز التحقق غير صالح"
+            ]);
         }
 
         if ($otpRecord->isExpired()) {
             return response()->json([
-                'message' => 'OTP has expired'
-            ], 400);
+                "fr_message" => "OTP a expiré",
+                "ar_message" => "رمز التحقق منتهي الصلاحية  "
+            ]);
         }
 
         // Update user password
@@ -199,7 +201,8 @@ class AuthController
         $user->tokens()->delete();
 
         return response()->json([
-            'message' => 'Password reset successfully'
+            'fr_message' => 'Mot de passe réinitialisé avec succès',
+            'ar_message' => 'تم إعادة تعيين كلمة المرور بنجاح'
         ], 200);
     }
 
@@ -220,18 +223,22 @@ class AuthController
 
         if (!$otpRecord) {
             return response()->json([
-                'message' => 'Invalid OTP'
-            ], 400);
+                "fr_message" => "OTP invalide",
+                "ar_message" => "رمز التحقق غير صالح"
+            ]);
         }
 
         if ($otpRecord->isExpired()) {
             return response()->json([
-                'message' => 'OTP has expired'
-            ], 400);
+                "fr_message" => "OTP a expiré",
+                "ar_message" => "رمز التحقق منتهي الصلاحية"
+            
+            ]);
         }
 
         return response()->json([
-            'message' => 'OTP verified successfully'
+            'fr_message' => 'OTP vérifié avec succès',
+            'ar_message' => 'تم التحقق من رمز التحقق بنجاح'
         ], 200);
     }
     /**

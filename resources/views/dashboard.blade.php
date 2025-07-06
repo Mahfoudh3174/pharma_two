@@ -58,7 +58,7 @@
                             </svg>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 mt-2">+{{ rand(1, 10) }}% ce mois</p>
+                    <p class="text-xs text-gray-500 mt-2">dans votre pharmacie</p>
                 </div>
                 
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
