@@ -33,6 +33,35 @@
         </div>
     </div>
 
+    <!-- Search, Sort, Filter Form -->
+    <form action="{{ route('admin.dashboard') }}" method="GET" class="mb-8 bg-white p-6 rounded-xl shadow">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label for="search" class="block text-sm font-medium text-gray-700">Search</label>
+                <input type="text" name="search" id="search" value="{{ $search }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+                <label for="sort_by" class="block text-sm font-medium text-gray-700">Sort By</label>
+                <select name="sort_by" id="sort_by" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <option value="id" @if($sortBy === 'id') selected @endif>ID</option>
+                    <option value="name" @if($sortBy === 'name') selected @endif>Name</option>
+                    <option value="email" @if($sortBy === 'email') selected @endif>Email</option>
+                </select>
+            </div>
+            <div>
+                <label for="sort_order" class="block text-sm font-medium text-gray-700">Sort Order</label>
+                <select name="sort_order" id="sort_order" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <option value="asc" @if($sortOrder === 'asc') selected @endif>Ascending</option>
+                    <option value="desc" @if($sortOrder === 'desc') selected @endif>Descending</option>
+                </select>
+            </div>
+        </div>
+        <div class="mt-4">
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md shadow-sm">Apply Filters</button>
+            <a href="{{ route('admin.dashboard') }}" class="ml-2 text-gray-600 hover:text-gray-900">Clear Filters</a>
+        </div>
+    </form>
+
     <!-- Users with Pharmacies -->
     <div class="mb-12">
         <div class="flex items-center gap-2 mb-4">
@@ -64,11 +93,12 @@
                             <span class="inline-block bg-{{ $user->status === 'active' ? 'green' : 'red' }}-100 text-{{ $user->status === 'active' ? 'green' : 'red' }}-800 text-xs px-2 py-1 rounded-full">{{ $user->status }}</span>
                         </td>
                         <td class="px-6 py-3">
-                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST">
+                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST" class="inline-block">
                                 @csrf
                                 @method('PATCH')
                                 <button type="submit" class="bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-500 hover:bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-600 text-white px-3 py-1 rounded shadow">{{ $user->status === 'active' ? 'Désactiver' : 'Activer' }}</button>
                             </form>
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">Edit</a>
                         </td>
                     </tr>
                     @empty
@@ -76,6 +106,9 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+        <div class="mt-4">
+            {{ $activeUsersWithPharmacies->appends(request()->query())->links() }}
         </div>
     </div>
 
@@ -110,11 +143,12 @@
                             <span class="inline-block bg-{{ $user->status === 'active' ? 'green' : 'red' }}-100 text-{{ $user->status === 'active' ? 'green' : 'red' }}-800 text-xs px-2 py-1 rounded-full">{{ $user->status }}</span>
                         </td>
                         <td class="px-6 py-3">
-                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST">
+                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST" class="inline-block">
                                 @csrf
                                 @method('PATCH')
                                 <button type="submit" class="bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-500 hover:bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-600 text-white px-3 py-1 rounded shadow">{{ $user->status === 'active' ? 'Désactiver' : 'Activer' }}</button>
                             </form>
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">Edit</a>
                         </td>
                     </tr>
                     @empty
@@ -122,6 +156,9 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+        <div class="mt-4">
+            {{ $inactiveUsersWithPharmacies->appends(request()->query())->links() }}
         </div>
     </div>
 
@@ -152,11 +189,12 @@
                             <span class="inline-block bg-{{ $user->status === 'active' ? 'green' : 'red' }}-100 text-{{ $user->status === 'active' ? 'green' : 'red' }}-800 text-xs px-2 py-1 rounded-full">{{ $user->status }}</span>
                         </td>
                         <td class="px-6 py-3">
-                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST">
+                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST" class="inline-block">
                                 @csrf
                                 @method('PATCH')
                                 <button type="submit" class="bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-500 hover:bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-600 text-white px-3 py-1 rounded shadow">{{ $user->status === 'active' ? 'Désactiver' : 'Activer' }}</button>
                             </form>
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">Edit</a>
                         </td>
                     </tr>
                     @empty
@@ -165,7 +203,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
+        
+        <div class="mt-4">
+            {{ $inactiveRegularUsers->appends(request()->query())->links() }}
+        </div>
 
     <!-- Inactive Regular Users -->
     <div class="mb-12">
@@ -194,11 +235,12 @@
                             <span class="inline-block bg-{{ $user->status === 'active' ? 'green' : 'red' }}-100 text-{{ $user->status === 'active' ? 'green' : 'red' }}-800 text-xs px-2 py-1 rounded-full">{{ $user->status }}</span>
                         </td>
                         <td class="px-6 py-3">
-                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST">
+                            <form action="{{ route('admin.users.toggle_status', $user->id) }}" method="POST" class="inline-block">
                                 @csrf
                                 @method('PATCH')
                                 <button type="submit" class="bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-500 hover:bg-{{ $user->status === 'active' ? 'yellow' : 'green' }}-600 text-white px-3 py-1 rounded shadow">{{ $user->status === 'active' ? 'Désactiver' : 'Activer' }}</button>
                             </form>
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">Edit</a>
                         </td>
                     </tr>
                     @empty
@@ -206,6 +248,9 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+        <div class="mt-4">
+            {{ $inactiveRegularUsers->appends(request()->query())->links() }}
         </div>
     </div>
 
@@ -246,6 +291,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $activePharmacies->appends(request()->query())->links() }}
+        </div>
     </div>
 
     <!-- Inactive Pharmacies -->
@@ -285,6 +333,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $inactivePharmacies->appends(request()->query())->links() }}
+        </div>
     </div>
 </div>
 @endsection 

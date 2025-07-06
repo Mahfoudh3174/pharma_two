@@ -35,7 +35,12 @@ Route::post('/login', function (Request $request) {
 
         $user = $request->user();
 
-
+        if ($user->status !== 'active') {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'credential' => ['Your account is inactive. Please contact an administrator.'],
+            ]);
+        }
 
         $hasPharmacy = Pharmacy::where('user_id', $user->id)->exists();
 
