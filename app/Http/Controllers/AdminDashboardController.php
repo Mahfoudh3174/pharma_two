@@ -135,7 +135,21 @@ class AdminDashboardController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', \Illuminate\Validation\Rule::unique('users')->ignore($user->id)],
  
-            'phone' => ['nullable', 'string', 'max:255'],
+                            'phone' => ['nullable', 'string', 'max:15', \Illuminate\Validation\Rule::unique('users')->ignore($user->id), 'regex:/^[2-4][0-9]{7}$/'],
+
+        ],[
+            'phone.regex' => 'Le numéro de téléphone doit commencer par 2, 3 ou 4 et être suivi de 7 chiffres.',
+            'phone.unique' => 'Le numéro de téléphone a déjà été pris.',
+            'email.unique' => 'L\'email a déjà été pris.',
+            'email.email' => 'L\'email doit être une adresse email valide.',
+            'email.max' => 'L\'email ne doit pas dépasser 255 caractères.',
+            'name.required' => 'Le nom est requis.',
+            'name.string' => 'Le nom doit être une chaîne de caractères.',
+            'name.max' => 'Le nom ne doit pas dépasser 255 caractères.',
+            'phone.required' => 'Le numéro de téléphone est requis.',
+            'phone.max' => 'Le numéro de téléphone ne doit pas dépasser 15 caractères.',
+            'phone.regex' => 'Le numéro de téléphone doit commencer par 2, 3',
+            
         ]);
 
         $user->update($validated);
