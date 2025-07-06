@@ -193,7 +193,7 @@
             </table>
         </div>
         <div class="mt-4">
-            {{ $activeUsersWithPharmacies->appends(request()->query())->links() }}
+            {{ $inactiveRegularUsers->appends(request()->query())->links() }}
         </div>
     </div>
 
@@ -251,7 +251,7 @@
     <div class="mb-12">
         <div class="flex items-center gap-2 mb-4">
             <svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-            <h2 class="text-xl font-bold text-gray-800">Utilisateurs réguliers</h2>
+            <h2 class="text-xl font-bold text-gray-800">Les Clients actifs</h2>
         </div>
         <div class="overflow-x-auto rounded-xl shadow">
             <table class="min-w-full divide-y divide-gray-200">
@@ -292,16 +292,16 @@
                 </tbody>
             </table>
         </div>
-        
         <div class="mt-4">
-            {{ $inactiveRegularUsers->appends(request()->query())->links() }}
+            {{ $activeRegularUsers->appends(request()->query())->links() }}
         </div>
+    </div>
 
     <!-- Inactive Regular Users -->
     <div class="mb-12">
         <div class="flex items-center gap-2 mb-4">
             <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-            <h2 class="text-xl font-bold text-gray-800">Utilisateurs réguliers inactifs</h2>
+            <h2 class="text-xl font-bold text-gray-800">Les Clients inactifs</h2>
         </div>
         <div class="overflow-x-auto rounded-xl shadow">
             <table class="min-w-full divide-y divide-gray-200">

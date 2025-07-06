@@ -134,7 +134,8 @@ class AdminDashboardController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', \Illuminate\Validation\Rule::unique('users')->ignore($user->id)],
-            'role' => ['required', 'string', 'in:admin,pharmacy,user'],
+ 
+            'phone' => ['nullable', 'string', 'max:255'],
         ]);
 
         $user->update($validated);
