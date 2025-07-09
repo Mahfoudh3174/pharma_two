@@ -34,33 +34,33 @@
     </div>
 
     <!-- Search, Sort, Filter Form -->
-    <form action="{{ route('admin.dashboard') }}" method="GET" class="mb-8 bg-white p-6 rounded-xl shadow">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-                <label for="search" class="block text-sm font-medium text-gray-700">Search</label>
-                <input type="text" name="search" id="search" value="{{ $search }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <div>
-                <label for="sort_by" class="block text-sm font-medium text-gray-700">Sort By</label>
-                <select name="sort_by" id="sort_by" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    <option value="id" @if($sortBy === 'id') selected @endif>ID</option>
-                    <option value="name" @if($sortBy === 'name') selected @endif>Name</option>
-                    <option value="email" @if($sortBy === 'email') selected @endif>Email</option>
-                </select>
-            </div>
-            <div>
-                <label for="sort_order" class="block text-sm font-medium text-gray-700">Sort Order</label>
-                <select name="sort_order" id="sort_order" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    <option value="asc" @if($sortOrder === 'asc') selected @endif>Ascending</option>
-                    <option value="desc" @if($sortOrder === 'desc') selected @endif>Descending</option>
-                </select>
-            </div>
+   <form action="{{ route('admin.dashboard') }}" method="GET" class="mb-8 bg-white p-6 rounded-xl shadow">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+            <label for="search" class="block text-sm font-medium text-gray-700">Rechercher</label>
+            <input type="text" name="search" id="search" value="{{ $search }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
         </div>
-        <div class="mt-4">
-            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md shadow-sm">Apply Filters</button>
-            <a href="{{ route('admin.dashboard') }}" class="ml-2 text-gray-600 hover:text-gray-900">Clear Filters</a>
+        <div>
+            <label for="sort_by" class="block text-sm font-medium text-gray-700">Trier par</label>
+            <select name="sort_by" id="sort_by" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <option value="name" @if($sortBy === 'name') selected @endif>Nom</option>
+                <option value="email" @if($sortBy === 'email') selected @endif>Email</option>
+            </select>
         </div>
-    </form>
+        <div>
+            <label for="sort_order" class="block text-sm font-medium text-gray-700">Ordre de tri</label>
+            <select name="sort_order" id="sort_order" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <option value="asc" @if($sortOrder === 'asc') selected @endif>Ascendant</option>
+                <option value="desc" @if($sortOrder === 'desc') selected @endif>Descendant</option>
+            </select>
+        </div>
+    </div>
+    <div class="mt-4">
+        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md shadow-sm">Appliquer les filtres</button>
+        <a href="{{ route('admin.dashboard') }}" class="ml-2 text-gray-600 hover:text-gray-900">Réinitialiser les filtres</a>
+    </div>
+</form>
+
 
 
     <!-- Pharmacies -->
@@ -78,9 +78,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($activePharmacies as $pharmacy)
+                @foreach($activePharmacies as $key => $pharmacy)
                 <tr>
-                    <td class="py-2 px-4">{{ $pharmacy->id }}</td>
+                    <td class="py-2 px-4">{{ $key+1 }}</td>
                     <td class="py-2 px-4">{{ $pharmacy->name }}</td>
                     <td class="py-2 px-4">{{ $pharmacy->user->name ?? '-' }}</td>
                     <td class="py-2 px-4">{{ $pharmacy->address }}<br>Lat: {{ $pharmacy->latitude }}, Lng: {{ $pharmacy->longitude }}</td>
@@ -120,9 +120,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($inactivePharmacies as $pharmacy)
+                @foreach($inactivePharmacies as $key => $pharmacy)
                 <tr>
-                    <td class="py-2 px-4">{{ $pharmacy->id }}</td>
+                    <td class="py-2 px-4">{{ $key+1}}</td>
                     <td class="py-2 px-4">{{ $pharmacy->name }}</td>
                     <td class="py-2 px-4">{{ $pharmacy->user->name ?? '-' }}</td>
                     <td class="py-2 px-4">{{ $pharmacy->address }}<br>Lat: {{ $pharmacy->latitude }}, Lng: {{ $pharmacy->longitude }}</td>
@@ -166,9 +166,9 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
-                    @forelse($activeUsersWithPharmacies as $user)
+                    @forelse($activeUsersWithPharmacies as $key=>$user)
                     <tr class="hover:bg-blue-50 transition">
-                        <td class="px-6 py-3">{{ $user->id }}</td>
+                        <td class="px-6 py-3">{{ $key+1}}</td>
                         <td class="px-6 py-3 font-semibold text-gray-800">{{ $user->name }}</td>
                         <td class="px-6 py-3">{{ $user->email }}</td>
                         <td class="px-6 py-3">
@@ -216,9 +216,9 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
-                    @forelse($inactiveUsersWithPharmacies as $user)
+                    @forelse($inactiveUsersWithPharmacies as $key=>$user)
                     <tr class="hover:bg-red-50 transition">
-                        <td class="px-6 py-3">{{ $user->id }}</td>
+                        <td class="px-6 py-3">{{ $key+1 }}</td>
                         <td class="px-6 py-3 font-semibold text-gray-800">{{ $user->name }}</td>
                         <td class="px-6 py-3">{{ $user->email }}</td>
                         <td class="px-6 py-3">
@@ -266,9 +266,9 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
-                    @forelse($activeRegularUsers as $user)
+                    @forelse($activeRegularUsers as $key=> $user)
                     <tr class="hover:bg-green-50 transition">
-                        <td class="px-6 py-3">{{ $user->id }}</td>
+                        <td class="px-6 py-3">{{ $key+1}}</td>
                         <td class="px-6 py-3 font-semibold text-gray-800">{{ $user->name }}</td>
                         <td class="px-6 py-3">{{ $user->email }}</td>
                         <td class="px-6 py-3">{{ $user->phone ?? '-' }}</td>
@@ -316,9 +316,9 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
-                    @forelse($inactiveRegularUsers as $user)
+                    @forelse($inactiveRegularUsers as $key=> $user)
                     <tr class="hover:bg-red-50 transition">
-                        <td class="px-6 py-3">{{ $user->id }}</td>
+                        <td class="px-6 py-3">{{ $key+1}}</td>
                         <td class="px-6 py-3 font-semibold text-gray-800">{{ $user->name }}</td>
                         <td class="px-6 py-3">{{ $user->email }}</td>
                         <td class="px-6 py-3">{{ $user->phone ?? '-' }}</td>

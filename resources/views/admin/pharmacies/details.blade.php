@@ -67,49 +67,50 @@
             Commandes vendues par cette pharmacie
         </h2>
 
-        <form action="{{ route('admin.pharmacies.details', $pharmacy->id) }}" method="GET" class="mb-8 bg-white p-6 rounded-xl shadow">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <label for="search" class="block text-sm font-medium text-gray-700">Search</label>
-                    <input type="text" name="search" id="search" value="{{ $search }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                </div>
-                <div>
-                    <label for="sort_by" class="block text-sm font-medium text-gray-700">Sort By</label>
-                    <select name="sort_by" id="sort_by" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                        <option value="id" @if($sortBy === 'id') selected @endif>ID</option>
-                        <option value="created_at" @if($sortBy === 'created_at') selected @endif>Date</option>
-                        <option value="total_amount" @if($sortBy === 'total_amount') selected @endif>Total Amount</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="sort_order" class="block text-sm font-medium text-gray-700">Sort Order</label>
-                    <select name="sort_order" id="sort_order" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                        <option value="asc" @if($sortOrder === 'asc') selected @endif>Ascending</option>
-                        <option value="desc" @if($sortOrder === 'desc') selected @endif>Descending</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                    <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                        <option value="">All</option>
-                        <option value="VALIDEE" @if($filterStatus === 'VALIDEE') selected @endif>VALIDEE</option>
-                        <option value="REJETEE" @if($filterStatus === 'REJETEE') selected @endif>REJETEE</option>
-                        <option value="LIVRÉ" @if($filterStatus === 'LIVRÉ') selected @endif>LIVRÉ</option>
-                        <option value="PENDING" @if($filterStatus === 'PENDING') selected @endif>PENDING</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mt-4">
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md shadow-sm">Apply Filters</button>
-                <a href="{{ route('admin.pharmacies.details', $pharmacy->id) }}" class="ml-2 text-gray-600 hover:text-gray-900">Clear Filters</a>
-            </div>
-        </form>
+       <form action="{{ route('admin.pharmacies.details', $pharmacy->id) }}" method="GET" class="mb-8 bg-white p-6 rounded-xl shadow">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+            <label for="search" class="block text-sm font-medium text-gray-700">Rechercher</label>
+            <input type="text" name="search" id="search" value="{{ $search }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        </div>
+        <div>
+            <label for="sort_by" class="block text-sm font-medium text-gray-700">Trier par</label>
+            <select name="sort_by" id="sort_by" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <option value="id" @if($sortBy === 'id') selected @endif>ID</option>
+                <option value="created_at" @if($sortBy === 'created_at') selected @endif>Date</option>
+                <option value="total_amount" @if($sortBy === 'total_amount') selected @endif>Montant total</option>
+            </select>
+        </div>
+        <div>
+            <label for="sort_order" class="block text-sm font-medium text-gray-700">Ordre de tri</label>
+            <select name="sort_order" id="sort_order" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <option value="asc" @if($sortOrder === 'asc') selected @endif>Ascendant</option>
+                <option value="desc" @if($sortOrder === 'desc') selected @endif>Descendant</option>
+            </select>
+        </div>
+        <div>
+            <label for="status" class="block text-sm font-medium text-gray-700">Statut</label>
+            <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <option value="">Tous</option>
+                <option value="VALIDEE" @if($filterStatus === 'VALIDEE') selected @endif>Validée</option>
+                <option value="REJETEE" @if($filterStatus === 'REJETEE') selected @endif>Rejetée</option>
+                <option value="LIVRÉ" @if($filterStatus === 'LIVRÉ') selected @endif>Livré</option>
+                <option value="PENDING" @if($filterStatus === 'PENDING') selected @endif>En attente</option>
+            </select>
+        </div>
+    </div>
+    <div class="mt-4">
+        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md shadow-sm">Appliquer les filtres</button>
+        <a href="{{ route('admin.pharmacies.details', $pharmacy->id) }}" class="ml-2 text-gray-600 hover:text-gray-900">Réinitialiser les filtres</a>
+    </div>
+</form>
+
         <div class="overflow-x-auto rounded-xl shadow">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Commande #</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Utilisateur</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Client</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Statut</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Total</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Date</th>

@@ -21,7 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'verified')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -36,7 +36,7 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','verified'])->group(function () {
     // Pharmacy routes
     Route::get('/pharmacy/create', [\App\Http\Controllers\PharmacyController::class, 'create'])->name('pharmacy.create');
     Route::post('/pharmacy', [\App\Http\Controllers\PharmacyController::class, 'store'])->name('pharmacy.store');
@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/pharmacy/medications/{medication}', [PharmacyController::class, 'updateMedication'])->name('pharmacy.medications.update');
     Route::delete('/pharmacy/medications/{medication}', [PharmacyController::class, 'removeMedication'])->name('pharmacy.medications.destroy');
  
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth','verified'])->group(function () {
         Route::resource('medications', MedicationController::class);
     });
     Route::get('/facture/{id}', [PdfController::class, 'generatePdf'])->name('facture.generate');
@@ -73,7 +73,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // More admin routes can be added here
 });
 
-Route::middleware(['auth', 'ensure.pharmacy', 'pharmacy'])->group(function () {
+Route::middleware(['auth', 'ensure.pharmacy', 'pharmacy','verified'])->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     // Add more pharmacy routes here
 });
