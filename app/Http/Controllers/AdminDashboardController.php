@@ -215,6 +215,7 @@ class AdminDashboardController extends Controller
     public function updatePharmacy(Request $request, Pharmacy $pharmacy)
     {
         $validated = $request->validate([
+            "name" => ['required', 'string', 'max:255'],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
         ]);

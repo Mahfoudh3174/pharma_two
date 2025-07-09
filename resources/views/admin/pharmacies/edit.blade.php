@@ -7,6 +7,13 @@
     <form action="{{ route('admin.pharmacies.update', $pharmacy) }}" method="POST">
         @csrf
         @method('PUT')
+        <div class="mt-4">
+            <label for="name" class="block text-sm font-medium text-gray-700">Nom de la pharmacie</label>
+            <input type="text" name="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="{{ old('name', $pharmacy->name) }}">
+            @error('name')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
 
         <div class="mt-4">
             <label for="latitude" class="block text-sm font-medium text-gray-700">Latitude</label>

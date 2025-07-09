@@ -46,7 +46,7 @@ class PharmacyController extends Controller
         });
     })
         ->orderBy('id', 'desc')
-         ->paginate(9);
+         ->paginate(4);
             // ->cursorPaginate(PAGINATE, ['*'], 'cursor', $request->cursor ? $request->cursor : null);
 
     return response()->json([
