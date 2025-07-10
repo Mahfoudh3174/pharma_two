@@ -20,12 +20,16 @@ class PharmacyController extends Controller
         ->where('status', 'active') 
         ->when($request->search, function ($query) use ($request) {
             $query->where('name', 'like', '%' . $request->search . '%');
-        })->
+        })
 
-        get();
+         ->paginate(4);
 
         return response()->json([
             'pharmacies'=>PharmacyResource::collection($pharmacies),
+            "meta"=>[
+                'current_page'=>$pharmacies->currentPage(),
+                'last_page'=>$pharmacies->lastPage(),
+            ],
             "categories"=>CategoryResource::collection(Category::get())
         ], 200);
     }
